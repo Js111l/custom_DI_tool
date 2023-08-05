@@ -1,5 +1,7 @@
 package org.custom.injector;
 
+import static org.custom.Utils.FIRST_ELEMENT;
+import static org.custom.Utils.ONE;
 import static org.custom.inspector.BeanDefInspector.getConfigBeanDefClasses;
 import static org.custom.inspector.BeanDefInspector.getConfigClassMethodsMap;
 
@@ -13,8 +15,6 @@ import org.custom.annotations.Default;
 import org.custom.exceptions.DuplicateBeansFound;
 
 public class BeanDefinitonInjector extends Injector {
-
-  private static final int ONE = 1;
 
   @Override
   public void setContainerBeans(Map<Class<?>, Object> containerBeans) {
@@ -37,11 +37,11 @@ public class BeanDefinitonInjector extends Injector {
       if (methods.size() > ONE) {
         method = getDefaultAnnotatedMethod(methods).orElseThrow(
             () -> new DuplicateBeansFound(
-                "No qualifying bean of type" + methods.get(0).getReturnType() + " exists!")
-            //TODO
+                "No qualifying bean of type" + methods.get(FIRST_ELEMENT).getReturnType()
+                    + " exists!")
         );
       } else {
-        method = methods.get(0);
+        method = methods.get(FIRST_ELEMENT);
       }
       try {
         var returnedBean = method.invoke(objectClassPair.getLeft());

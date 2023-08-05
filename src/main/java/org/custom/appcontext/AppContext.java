@@ -2,6 +2,7 @@ package org.custom.appcontext;
 
 
 import static org.apache.commons.lang3.ArrayUtils.isNotEmpty;
+import static org.custom.Utils.ONE;
 
 import java.util.List;
 import java.util.Map;
@@ -54,7 +55,9 @@ public class AppContext implements CustomApplicationContext {
   public Object getItem(String name) {
     var key = beans.keySet().stream().filter(clazz -> clazz.getSimpleName().equals(name))
         .findFirst()
-        .orElseThrow();//TODO
+        .orElseThrow(
+            () -> new NoSuchBeanFoundException("No such bean with name" + name + "found!")
+        );
     return beans.get(key);
   }
 
@@ -71,9 +74,9 @@ public class AppContext implements CustomApplicationContext {
           .toList();
       System.out.println(aInterface);
       System.out.println(beans.keySet());
-      if (list.size() > 1) {
+      if (list.size() > ONE) {
         var defaults = list.stream().filter(x -> x.isAnnotationPresent(Default.class)).toList();
-        if (defaults.size() > 1) {
+        if (defaults.size() > ONE) {
           throw new DuplicateBeansFound("more than one default annotation!");
         }
         var clazz = defaults.stream().findFirst()

@@ -12,6 +12,9 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class Utils {
+  public static final int FIRST_ELEMENT = 0;
+  public static final int ONE = 1;
+  public static final int ZERO = 1;
 
   public static HashMap<Class<?>, List<Class<?>>> mergeMaps(
       Map<Class<?>, List<Class<?>>> constructorDependencies,
@@ -23,7 +26,7 @@ public class Utils {
   }
 
   public static Constructor<?> getConstructor(Class<?> cls) {
-    return Arrays.stream(cls.getConstructors()).findFirst().orElseThrow();//TODO
+    return Arrays.stream(cls.getConstructors()).findFirst().orElseThrow();
   }
 
   public static List<Class<? extends Annotation>> getFieldAnnotations(

@@ -1,5 +1,7 @@
 package org.custom.initializer;
 
+import static org.custom.Utils.ZERO;
+
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.List;
@@ -14,17 +16,14 @@ public class ClassInitializer implements Initializer {
 
   @Override
   public Object initialize(Class<?> clazz) {
-//    if (!context.contains(clazz)) {
-//      throw new RuntimeException("lalalaland");
-//    } //TODO
     Object targetObject;
-    var constructor = Arrays.stream(clazz.getConstructors()).findFirst().orElseThrow();//TODO
+    var constructor = Arrays.stream(clazz.getConstructors()).findFirst().orElseThrow();
     try {
-      if (constructor.getParameterCount() == 0) {
+      if (constructor.getParameterCount() == ZERO) {
         targetObject = constructor.newInstance();
       } else {
         targetObject = constructor.newInstance(
-            Arrays.stream(constructor.getParameterTypes())   //TODO
+            Arrays.stream(constructor.getParameterTypes())
                 .map(this::initialize)
                 .toArray());
       }

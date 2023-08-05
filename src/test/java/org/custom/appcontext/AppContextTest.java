@@ -20,20 +20,20 @@ import org.custom.appcontext.testobj.dependencyinjection.simpleobjects.A;
 
 class AppContextTest {
 
-  private final String SIMPLE_DI_TESTOBJECTS_PACKAGE = "org.custom.appcontext.testobj.dependencyinjection.simpleobjects";
-  private final String PROPER_CONFIG_TESTOBJECTS_PACKAGE = "org.custom.appcontext.testobj.configobjectstest.propeconfigobject";
-  private final String PROPER_CONFIG_TESTOBJECTS2_PACKAGE = "org.custom.appcontext.testobj.configobjectstest.propeconfigobject2";
-  private final String INVALID_CONFIG_TESTOBJECTS_PACKAGE = "org.custom.appcontext.testobj.configobjectstest.invalidconfigobject";
+  private static final String SIMPLE_DI_TESTOBJECTS_PACKAGE = "org.custom.appcontext.testobj.dependencyinjection.simpleobjects";
+  private static final String PROPER_CONFIG_TESTOBJECTS_PACKAGE = "org.custom.appcontext.testobj.configobjectstest.propeconfigobject";
+  private static final String PROPER_CONFIG_TESTOBJECTS2_PACKAGE = "org.custom.appcontext.testobj.configobjectstest.propeconfigobject2";
+  private static final String INVALID_CONFIG_TESTOBJECTS_PACKAGE = "org.custom.appcontext.testobj.configobjectstest.invalidconfigobject";
 
-  private final String DEFAULT_ANNOTATION_TESTOBJECT_PACKAGE = "org.custom.appcontext.testobj.defaultannotationtest.withdefaultannotation.defaultoutsideconfig";
-  private final String NO_DEFAULT_ANNOTATION_TESTOBJECT_PACKAGE = "org.custom.appcontext.testobj.defaultannotationtest.nodefaultannotation.nodefaultoutsideconfig";
-  private final String NO_DEFAULT_ANNOTATION_SAMEINTERFACE_TESTOBJECTS_PACKAGE =
+  private static final String DEFAULT_ANNOTATION_TESTOBJECT_PACKAGE = "org.custom.appcontext.testobj.defaultannotationtest.withdefaultannotation.defaultoutsideconfig";
+  private static final String NO_DEFAULT_ANNOTATION_TESTOBJECT_PACKAGE = "org.custom.appcontext.testobj.defaultannotationtest.nodefaultannotation.nodefaultoutsideconfig";
+  private static final String NO_DEFAULT_ANNOTATION_SAMEINTERFACE_TESTOBJECTS_PACKAGE =
       "org.custom.appcontext.testobj.defaultannotationtest.nodefaultannotation.sameinterfaceobjects";
-  private final String DEFAULT_ANNOTATION_SAMEINTERFACE_TESTOBJECTS_PACKAGE =
+  private static final String DEFAULT_ANNOTATION_SAMEINTERFACE_TESTOBJECTS_PACKAGE =
       "org.custom.appcontext.testobj.defaultannotationtest.withdefaultannotation.sameinterfacetestobjects";
-  private final String DUPLICATE_DEFAULT_OUTSIDECONFIG_ANNOTATION_TESTOBJECTS_PACKAGE =
+  private static final String DUPLICATE_DEFAULT_OUTSIDECONFIG_ANNOTATION_TESTOBJECTS_PACKAGE =
       "org.custom.appcontext.testobj.defaultannotationtest.duplicatedefaultannotation.outsideconfig";
-  private final String DUPLICATE_DEFAULT_INSIDECONFIG_ANNOTATION_TESTOBJECTS_PACKAGE =
+  private static final String DUPLICATE_DEFAULT_INSIDECONFIG_ANNOTATION_TESTOBJECTS_PACKAGE =
       "org.custom.appcontext.testobj.defaultannotationtest.duplicatedefaultannotation.insideconfig";
 
   // - Simple Dependency Injection Tests

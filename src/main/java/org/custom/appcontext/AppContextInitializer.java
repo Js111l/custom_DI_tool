@@ -59,8 +59,6 @@ public class AppContextInitializer extends ContextInitializer {
     this.dependencyGetters.forEach(dependencyGetter -> classAllDependenciesMap.putAll(
         dependencyGetter.getDependencies(this.items)));
 
-//    var classAllDependenciesMap = mergeMaps(constructorDependencies, fieldDependencies); //TODO
-
     var dependencyInspector = new DependencyInspector();
     dependencyInspector.checkForCycles(classAllDependenciesMap);
     dependencyInspector.checkForDuplicates(classAllDependenciesMap);
@@ -82,7 +80,7 @@ public class AppContextInitializer extends ContextInitializer {
     this.injectors.forEach(injector -> {
       injector.setContainerBeans(this.context);
       injector.setClassSet(this.context.keySet());
-      injector.inject();// TODO
+      injector.inject();
     });
   }
 

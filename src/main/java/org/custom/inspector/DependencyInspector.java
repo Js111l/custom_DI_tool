@@ -31,9 +31,6 @@ public class DependencyInspector {
                 () -> new DuplicateBeansFound(
                     "No qualifying bean of type" + key.getName() + " exists!")
             ));
-    // throw new DuplicateBeansFound("No qualifying bean of type exists!");
-//Add duplicates to some set and then filter this out and check if one of them have default annotation
-    // or not. If not, throw the exception. TODO
 
   }
 
@@ -41,15 +38,14 @@ public class DependencyInspector {
       Map<Class<?>, List<Class<?>>> classListMap) {
     var list = classListMap.getOrDefault(aClass, new ArrayList<>());
 
-    for (int i = 0; i < list.size(); i++) {
-      if (visited.get(aClass) == null || !visited.get(aClass)) {
-        visited.put(aClass, true);
-        list.forEach(x -> helper(x, visited, classListMap));
-        visited.put(aClass, false);
-      } else {
-        throw new RuntimeException("Cycle!");
-      }
+    if (visited.get(aClass) == null || !visited.get(aClass)) {
+      visited.put(aClass, true);
+      list.forEach(x -> helper(x, visited, classListMap));
+      visited.put(aClass, false);
+    } else {
+      throw new RuntimeException("Cycle!");
     }
+
   }
 }
 
