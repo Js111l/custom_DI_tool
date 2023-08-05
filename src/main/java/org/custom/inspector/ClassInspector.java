@@ -6,17 +6,34 @@ import java.util.Arrays;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
+import static org.apache.commons.lang3.ObjectUtils.isNotEmpty;
 
 public class ClassInspector {
 
+  private String[] packagesToScan;
+
+  public ClassInspector(String[] packagesToScan) {
+    this.packagesToScan = packagesToScan;
+  }
+
+  public ClassInspector() {
+  }
+
   public List<Class<?>> getAllClasses() {
-    return getClassNameList()
-        .stream().map(this::getClass).collect(toList());
+    if (isNotEmpty(packagesToScan)) {
+      return getClassNameList()
+          .stream().filter(clazz -> packagesToScan != null && Arrays.stream(packagesToScan)
+              .anyMatch(clazz::startsWith))
+          .map(this::getClass).collect(toList());
+    } else {
+      return getClassNameList()
+          .stream()
+          .map(this::getClass).collect(toList());
+    }
   }
 
   private Class<?> getClass(String className) {
     try {
-      System.out.println(className);
       return Class.forName(className);
     } catch (ClassNotFoundException e) {
       throw new RuntimeException(e);

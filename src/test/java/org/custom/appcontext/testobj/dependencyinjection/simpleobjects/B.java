@@ -1,4 +1,4 @@
-package org.custom.appcontext.testobj;
+package org.custom.appcontext.testobj.dependencyinjection.simpleobjects;
 
 import org.custom.annotations.Item;
 

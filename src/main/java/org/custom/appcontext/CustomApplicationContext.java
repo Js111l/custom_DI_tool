@@ -1,6 +1,5 @@
 package org.custom.appcontext;
 
-import java.util.Map;
 
 public interface CustomApplicationContext {
 

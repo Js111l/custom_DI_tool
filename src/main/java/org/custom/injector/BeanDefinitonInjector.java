@@ -32,17 +32,19 @@ public class BeanDefinitonInjector extends Injector {
     var beanDefClasses = getConfigBeanDefClasses(classSet);
     var configClassMethodsMap = getConfigClassMethodsMap(beanDefClasses, containerBeans);
 
-    configClassMethodsMap.forEach((configClass, methods) -> {
+    configClassMethodsMap.forEach((objectClassPair, methods) -> {
       Method method;
       if (methods.size() > ONE) {
         method = getDefaultAnnotatedMethod(methods).orElseThrow(
-            () -> new DuplicateBeansFound("")
+            () -> new DuplicateBeansFound(
+                "No qualifying bean of type" + methods.get(0).getReturnType() + " exists!")
+            //TODO
         );
       } else {
         method = methods.get(0);
       }
       try {
-        var returnedBean = method.invoke(configClass);
+        var returnedBean = method.invoke(objectClassPair.getLeft());
         this.containerBeans.put(returnedBean.getClass(), returnedBean);
       } catch (IllegalAccessException | InvocationTargetException e) {
         throw new RuntimeException(e);
@@ -51,6 +53,10 @@ public class BeanDefinitonInjector extends Injector {
   }
 
   private Optional<Method> getDefaultAnnotatedMethod(List<Method> methods) {
+    if (methods.stream().filter(method -> method.isAnnotationPresent(Default.class)).count()
+        > ONE) {
+      throw new DuplicateBeansFound("More than one default annotated method!");
+    }
     return methods.stream().filter(method -> method.isAnnotationPresent(Default.class)).findFirst();
   }
 

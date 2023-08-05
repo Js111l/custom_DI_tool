@@ -1,16 +1,17 @@
-package org.custom.appcontext.testobj;
+package org.custom.appcontext.testobj.dependencyinjection.simpleobjects;
 
 import org.custom.annotations.Item;
 
 @Item
 public class A {
-private final B bObj;
+
+  private final B bObj;
 
   public A(B bObj) {
     this.bObj = bObj;
   }
 
-  public B getbObj() {
+  public B getB() {
     return bObj;
   }
 }

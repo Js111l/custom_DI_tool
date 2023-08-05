@@ -1,11 +1,9 @@
 package org.custom.injector;
 
-import static org.custom.Utils.getFieldAnnotations;
 
-import java.util.Arrays;
 import java.util.Map;
 import java.util.Set;
-import org.custom.dependency.DependencyGetter;
+import org.custom.dependency.FieldDependencyGetter;
 import org.custom.initializer.ClassInitializer;
 
 public class FieldInjector extends Injector {
@@ -23,9 +21,9 @@ public class FieldInjector extends Injector {
 
   @Override
   public void inject() {
-    var initializer = new ClassInitializer();
-    var classFieldsMap = new DependencyGetter().getFieldDependencies(
-        this.classSet.stream().toList(), getFieldAnnotations(this.classSet.stream().toList()));
+    //TODO
+    var classFieldsMap = new FieldDependencyGetter().getDependencies(
+        this.classSet.stream().toList());
 
     classFieldsMap.keySet().forEach(aClass -> {
       if (containerBeans.get(aClass) != null) {
@@ -33,9 +31,10 @@ public class FieldInjector extends Injector {
         var unInitializedFields = classFieldsMap.get(aClass);
 
         unInitializedFields.forEach(field -> {
+          var initializer = new ClassInitializer(this.classSet.stream().toList());
+
           var fieldType = field.getType();
-          var cons = Arrays.stream(fieldType.getConstructors()).findFirst().orElseThrow();//TODO
-          var initializedObject = initializer.initialize(cons);
+          var initializedObject = initializer.initialize(fieldType);
           field.setAccessible(true);
           try {
             field.set(obj, initializedObject);

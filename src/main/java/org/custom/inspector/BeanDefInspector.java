@@ -8,22 +8,22 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+import org.apache.commons.lang3.tuple.Pair;
 import org.custom.annotations.BeanDef;
 import org.custom.annotations.ConfigBeanDefinitions;
 
 public class BeanDefInspector {
 
-  public static HashMap<Object, List<Method>> getConfigClassMethodsMap(List<Class<?>> beanDefClasses,
+  public static HashMap<Pair<Object, Class<?>>, List<Method>> getConfigClassMethodsMap(
+      List<Class<?>> beanDefClasses,
       Map<Class<?>, Object> containerBeans) {
-    var classListHashMap = new HashMap<Object, List<Method>>();
+    var classListHashMap = new HashMap<Pair<Object, Class<?>>, List<Method>>();
+    beanDefClasses.forEach(configClass -> {
+      var configObj = containerBeans.get(configClass);
+      var methods = getAllAnnotatedMethodsFromObject(configObj);
 
-      beanDefClasses.forEach(configClass -> {
-      var obj = containerBeans.get(configClass);
-      var methods = getAllAnnotatedMethodsFromObject(obj);
-
-      methods.forEach(method -> {
-        addToMap(classListHashMap, method, obj);
-      });
+      methods.forEach(
+          method -> addToMap(classListHashMap, method, configObj, method.getReturnType()));
     });
     return classListHashMap;
   }
@@ -35,11 +35,11 @@ public class BeanDefInspector {
 
   }
 
-  public static void addToMap(HashMap<Object, List<Method>> classListHashMap,
-      Method method, Object obj) {
-    var list = classListHashMap.getOrDefault(obj, new ArrayList<>());
+  public static void addToMap(Map<Pair<Object, Class<?>>, List<Method>> classListHashMap,
+      Method method, Object configObj, Class<?> clazz) {
+    var list = classListHashMap.getOrDefault(Pair.of(configObj, clazz), new ArrayList<>());
     list.add(method);
-    classListHashMap.put(obj, list);
+    classListHashMap.put(Pair.of(configObj, clazz), list);
   }
 
   public static List<Method> getAllAnnotatedMethodsFromObject(Object obj) {
