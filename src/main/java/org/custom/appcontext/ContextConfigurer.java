@@ -1,7 +1,6 @@
 package org.custom.appcontext;
 
 import java.util.Map;
-import org.custom.appcontext.initializer.ContextInitializer;
 import org.custom.context.factory.contextinitializer.ContextInitializerFactory;
 
 public class ContextConfigurer {

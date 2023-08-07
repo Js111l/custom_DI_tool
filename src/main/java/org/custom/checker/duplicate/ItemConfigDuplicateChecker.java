@@ -5,6 +5,7 @@ import com.google.common.collect.Multimap;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import org.custom.annotations.Item;
 
 public class ItemConfigDuplicateChecker implements DuplicateChecker {
@@ -28,8 +29,8 @@ public class ItemConfigDuplicateChecker implements DuplicateChecker {
   private Class<?> getKeyFromValue(Class<?> value, Map<Class<?>, List<Class<?>>> map) {
     return map.entrySet().stream()
         .filter(entry -> entry.getValue().contains(value))
-        .map(x -> x.getKey()).findFirst()
-        .get();
+        .map(Entry::getKey).findFirst()
+        .orElseThrow();
   }
 
 }

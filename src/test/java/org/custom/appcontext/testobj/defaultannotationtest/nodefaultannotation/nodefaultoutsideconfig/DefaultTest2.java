@@ -1,6 +1,5 @@
 package org.custom.appcontext.testobj.defaultannotationtest.nodefaultannotation.nodefaultoutsideconfig;
 
-import org.custom.annotations.Default;
 import org.custom.annotations.Item;
 
 //@Default  - should throw duplicate beans exception

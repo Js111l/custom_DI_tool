@@ -1,8 +1,11 @@
 package org.custom.exceptions;
 
+import java.io.Serial;
+
 public class CilcularDependencyFoundExcpetion extends RuntimeException {
 
-  private static final long serialVersionUID = 3l;
+  @Serial
+  private static final long serialVersionUID = 3L;
 
   public CilcularDependencyFoundExcpetion(String message) {
     super(message);

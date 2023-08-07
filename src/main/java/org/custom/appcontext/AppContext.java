@@ -3,7 +3,6 @@ package org.custom.appcontext;
 import static org.custom.utils.ClassUtil.ONE;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -55,8 +54,7 @@ public class AppContext implements CustomApplicationContext {
     List<Class<?>> classList = new ArrayList<>();
 
     if (classToSearch.isInterface()) {
-      var aInterface = classToSearch;
-      classList = new ArrayList<>(this.beans.keySet().stream().filter(aInterface::isAssignableFrom)
+      classList = new ArrayList<>(this.beans.keySet().stream().filter(classToSearch::isAssignableFrom)
           .toList());
     }
     var defaults = classList.stream().filter(x -> x.isAnnotationPresent(Default.class)).toList();
@@ -65,13 +63,12 @@ public class AppContext implements CustomApplicationContext {
       throw new DuplicateBeansFound("more than one default annotation!");
     }
     if (classList.size() > ONE) {
-      var clazz = defaults.stream().findFirst()
+
+      classToSearch = defaults.stream().findFirst()
           .orElseThrow(
               () -> new DuplicateBeansFound(
                   "No qualifying bean of type " + requiredClass.getName() + " exists!")
           );
-
-      classToSearch = clazz;
     }
     return Optional.ofNullable(beans.get(classToSearch)).orElseThrow(() ->
         new NoSuchBeanFoundException(

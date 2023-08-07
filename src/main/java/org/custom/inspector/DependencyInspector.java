@@ -22,9 +22,7 @@ public class DependencyInspector {
       List<DuplicateChecker> duplicateCheckers) {
     var duplicates = ArrayListMultimap.<Class<?>, Class<?>>create();
 
-    duplicateCheckers.forEach(duplicateChecker -> {
-      duplicates.putAll(duplicateChecker.findDuplicates(classAllDependenciesMap));
-    });
+    duplicateCheckers.forEach(duplicateChecker -> duplicates.putAll(duplicateChecker.findDuplicates(classAllDependenciesMap)));
 
     duplicates.keySet().forEach(
         key -> duplicates.get(key).stream().filter(x -> x.isAnnotationPresent(Default.class))

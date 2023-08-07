@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 import static org.apache.commons.lang3.ObjectUtils.isNotEmpty;
@@ -22,14 +23,14 @@ public class ClassInspector {
   public List<Class<?>> getAllClasses() {
     List<Class<?>> list;
     if (isNotEmpty(packagesToScan)) {
-      list = new ArrayList<>(getClassNameList()
+      list = getClassNameList()
           .stream().filter(clazz -> packagesToScan != null && Arrays.stream(packagesToScan)
               .anyMatch(clazz::startsWith))
-          .map(this::getClass).collect(toList()));
+          .map(this::getClass).collect(toList());
     } else {
-      list = new ArrayList<>(getClassNameList()
+      list = getClassNameList()
           .stream()
-          .map(this::getClass).collect(toList()));
+          .map(this::getClass).collect(toList());
     }
     return list;
   }
