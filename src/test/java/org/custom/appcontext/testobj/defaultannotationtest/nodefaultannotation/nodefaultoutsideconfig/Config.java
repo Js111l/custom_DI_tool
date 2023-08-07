@@ -10,4 +10,5 @@ public class Config {
   public DefaultTest2 someBean() {
     return new DefaultTest2();
   }
+
 }

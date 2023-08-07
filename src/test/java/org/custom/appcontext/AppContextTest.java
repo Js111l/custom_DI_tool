@@ -21,12 +21,19 @@ import org.custom.appcontext.testobj.dependencyinjection.simpleobjects.A;
 class AppContextTest {
 
   private static final String SIMPLE_DI_TESTOBJECTS_PACKAGE = "org.custom.appcontext.testobj.dependencyinjection.simpleobjects";
-  private static final String PROPER_CONFIG_TESTOBJECTS_PACKAGE = "org.custom.appcontext.testobj.configobjectstest.propeconfigobject";
-  private static final String PROPER_CONFIG_TESTOBJECTS2_PACKAGE = "org.custom.appcontext.testobj.configobjectstest.propeconfigobject2";
-  private static final String INVALID_CONFIG_TESTOBJECTS_PACKAGE = "org.custom.appcontext.testobj.configobjectstest.invalidconfigobject";
+  private static final String SIMPLE_DI_TESTOBJECTS_CLASS_TO_INJECT_NOT_IN_CONTEXT_PACKAGE =
+      "org.custom.appcontext.testobj.dependencyinjection.classtoinjectnotinthecontext";
+  private static final String PROPER_CONFIG_TESTOBJECTS_PACKAGE =
+      "org.custom.appcontext.testobj.configobjectstest.propeconfigobject";
+  private static final String PROPER_CONFIG_TESTOBJECTS2_PACKAGE =
+      "org.custom.appcontext.testobj.configobjectstest.propeconfigobject2";
+  private static final String INVALID_CONFIG_TESTOBJECTS_PACKAGE =
+      "org.custom.appcontext.testobj.configobjectstest.invalidconfigobject";
 
-  private static final String DEFAULT_ANNOTATION_TESTOBJECT_PACKAGE = "org.custom.appcontext.testobj.defaultannotationtest.withdefaultannotation.defaultoutsideconfig";
-  private static final String NO_DEFAULT_ANNOTATION_TESTOBJECT_PACKAGE = "org.custom.appcontext.testobj.defaultannotationtest.nodefaultannotation.nodefaultoutsideconfig";
+  private static final String DEFAULT_ANNOTATION_TESTOBJECT_PACKAGE =
+      "org.custom.appcontext.testobj.defaultannotationtest.withdefaultannotation.defaultoutsideconfig";
+  private static final String NO_DEFAULT_ANNOTATION_TESTOBJECT_PACKAGE =
+      "org.custom.appcontext.testobj.defaultannotationtest.nodefaultannotation.nodefaultoutsideconfig";
   private static final String NO_DEFAULT_ANNOTATION_SAMEINTERFACE_TESTOBJECTS_PACKAGE =
       "org.custom.appcontext.testobj.defaultannotationtest.nodefaultannotation.sameinterfaceobjects";
   private static final String DEFAULT_ANNOTATION_SAMEINTERFACE_TESTOBJECTS_PACKAGE =
@@ -63,6 +70,13 @@ class AppContextTest {
         SIMPLE_DI_TESTOBJECTS_PACKAGE);
     A obj = (A) context.getItem(A.class);
     assertThat(obj.getB()).isInstanceOf(B.class);
+  }
+
+  @Test
+  public void getItem_classToInjectNotInContext_properlyInjectedObject() {
+    assertThatThrownBy(() -> new AppContext(
+        SIMPLE_DI_TESTOBJECTS_CLASS_TO_INJECT_NOT_IN_CONTEXT_PACKAGE)).isInstanceOf(
+        NoSuchBeanFoundException.class);
   }
 
   // - Simple Dependency Injection Tests ^^

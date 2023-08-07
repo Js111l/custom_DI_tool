@@ -1,16 +1,15 @@
 package org.custom.injector;
 
-import static org.custom.Utils.FIRST_ELEMENT;
-import static org.custom.Utils.ONE;
-import static org.custom.inspector.BeanDefInspector.getConfigBeanDefClasses;
-import static org.custom.inspector.BeanDefInspector.getConfigClassMethodsMap;
+import static org.custom.utils.ClassUtil.FIRST_ELEMENT;
+import static org.custom.utils.ClassUtil.ONE;
+import static org.custom.utils.BeanDefUtil.getConfigBeanDefClasses;
+import static org.custom.utils.BeanDefUtil.getConfigClassMethodsMap;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import org.custom.annotations.Default;
 import org.custom.exceptions.DuplicateBeansFound;
 
@@ -22,7 +21,7 @@ public class BeanDefinitonInjector extends Injector {
   }
 
   @Override
-  public void setClassSet(Set<Class<?>> classSet) {
+  public void setClassSet(List<Class<?>> classSet) {
     this.classSet = classSet;
   }
 
@@ -47,7 +46,7 @@ public class BeanDefinitonInjector extends Injector {
         var returnedBean = method.invoke(objectClassPair.getLeft());
         this.containerBeans.put(returnedBean.getClass(), returnedBean);
       } catch (IllegalAccessException | InvocationTargetException e) {
-        throw new RuntimeException(e);
+        throw new RuntimeException(e); // TODO
       }
     });
   }

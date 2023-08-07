@@ -2,7 +2,6 @@ package org.custom.appcontext.testobj.defaultannotationtest.duplicatedefaultanno
 
 import org.custom.annotations.Default;
 import org.custom.annotations.Item;
-import org.custom.appcontext.testobj.defaultannotationtest.duplicatedefaultannotation.outsideconfig.MessageService3;
 
 @Item
 @Default

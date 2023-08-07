@@ -20,9 +20,9 @@ public class ConfigDependencyGetter implements DependencyGetter<Class<?>, Class<
               .filter(method -> method.isAnnotationPresent(
                   BeanDef.class)).map(Method::getReturnType)
               .collect(Collectors.toList());
-
           map.put(configClass, methods);
         });
+
     return map;
   }
 }

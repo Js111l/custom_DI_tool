@@ -4,7 +4,6 @@ import org.custom.annotations.BeanDef;
 import org.custom.annotations.ConfigBeanDefinitions;
 import org.custom.annotations.Default;
 import org.custom.appcontext.testobj.configobjectstest.propeconfigobject.ExampleObj;
-import org.custom.appcontext.testobj.defaultannotationtest.nodefaultannotation.nodefaultoutsideconfig.DefaultTest2;
 
 @ConfigBeanDefinitions
 public class Config3 {

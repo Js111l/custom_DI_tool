@@ -1,6 +1,6 @@
 package org.custom.dependency;
 
-import static org.custom.Utils.getFieldAnnotations;
+import static org.custom.utils.ClassUtil.getFieldAnnotations;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;

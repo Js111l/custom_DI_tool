@@ -1,16 +1,16 @@
 package org.custom.injector;
 
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public abstract class Injector {
 
-  protected Set<Class<?>> classSet;
+  protected List<Class<?>> classSet;
   protected Map<Class<?>, Object> containerBeans;
 
   public abstract void setContainerBeans(Map<Class<?>, Object> containerBeans);
 
-  public abstract void setClassSet(Set<Class<?>> classSet);
+  public abstract void setClassSet(List<Class<?>> classSet);
 
   public abstract void inject();
 }

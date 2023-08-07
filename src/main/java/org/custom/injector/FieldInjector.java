@@ -1,8 +1,8 @@
 package org.custom.injector;
 
 
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import org.custom.dependency.FieldDependencyGetter;
 import org.custom.initializer.ClassInitializer;
 
@@ -14,14 +14,13 @@ public class FieldInjector extends Injector {
   }
 
   @Override
-  public void setClassSet(Set<Class<?>> classSet) {
+  public void setClassSet(List<Class<?>> classSet) {
     this.classSet = classSet;
   }
 
 
   @Override
   public void inject() {
-    //TODO
     var classFieldsMap = new FieldDependencyGetter().getDependencies(
         this.classSet.stream().toList());
 
@@ -31,7 +30,8 @@ public class FieldInjector extends Injector {
         var unInitializedFields = classFieldsMap.get(aClass);
 
         unInitializedFields.forEach(field -> {
-          var initializer = new ClassInitializer(this.classSet.stream().toList());
+          var initializer = new ClassInitializer(this.classSet,
+              List.of());
 
           var fieldType = field.getType();
           var initializedObject = initializer.initialize(fieldType);
@@ -39,12 +39,12 @@ public class FieldInjector extends Injector {
           try {
             field.set(obj, initializedObject);
           } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(e);  //TODO
           }
           containerBeans.put(obj.getClass(), obj);
         });
       } else {
-
+// Todo
       }
     });
   }

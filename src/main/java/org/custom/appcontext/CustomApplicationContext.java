@@ -7,5 +7,6 @@ public interface CustomApplicationContext {
 
   Object getItem(Class<?> requiredClass);
 
-  // Map<String, Object> getItemsOfType(Class<?> requiredClass); TODO
+  // Map<String, Object> getItemsOfType(Class<?> requiredClass);
+  // TODO
 }
