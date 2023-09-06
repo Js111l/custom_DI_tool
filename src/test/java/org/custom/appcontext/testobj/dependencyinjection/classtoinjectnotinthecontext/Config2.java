@@ -1,6 +1,6 @@
 package org.custom.appcontext.testobj.dependencyinjection.classtoinjectnotinthecontext;
 
-import org.custom.annotations.ConfigBeanDefinitions;
+import org.custom.core.annotations.ConfigBeanDefinitions;
 
 @ConfigBeanDefinitions
 public class Config2 {

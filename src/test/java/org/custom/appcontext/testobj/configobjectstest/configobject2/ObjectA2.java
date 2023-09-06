@@ -1,6 +1,6 @@
 package org.custom.appcontext.testobj.configobjectstest.configobject2;
 
-import org.custom.annotations.Item;
+import org.custom.core.annotations.Item;
 
 @Item
 public class ObjectA2 {

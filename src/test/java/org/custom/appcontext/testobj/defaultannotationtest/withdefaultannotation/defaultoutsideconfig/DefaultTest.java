@@ -1,7 +1,7 @@
 package org.custom.appcontext.testobj.defaultannotationtest.withdefaultannotation.defaultoutsideconfig;
 
-import org.custom.annotations.Default;
-import org.custom.annotations.Item;
+import org.custom.core.annotations.Default;
+import org.custom.core.annotations.Item;
 
 @Default
 @Item

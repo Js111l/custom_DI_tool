@@ -1,7 +1,7 @@
 package org.custom.appcontext.testobj.defaultannotationtest.nodefaultannotation.nodefaultoutsideconfig;
 
-import org.custom.annotations.BeanDef;
-import org.custom.annotations.ConfigBeanDefinitions;
+import org.custom.core.annotations.BeanDef;
+import org.custom.core.annotations.ConfigBeanDefinitions;
 
 @ConfigBeanDefinitions
 public class Config {

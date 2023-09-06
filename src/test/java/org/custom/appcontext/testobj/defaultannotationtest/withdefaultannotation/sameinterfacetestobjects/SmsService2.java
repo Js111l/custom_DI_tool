@@ -1,6 +1,6 @@
 package org.custom.appcontext.testobj.defaultannotationtest.withdefaultannotation.sameinterfacetestobjects;
 
-import org.custom.annotations.Item;
+import org.custom.core.annotations.Item;
 
 @Item
 public class SmsService2 implements MessageService2 {

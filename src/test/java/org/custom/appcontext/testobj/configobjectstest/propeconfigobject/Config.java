@@ -1,8 +1,8 @@
 package org.custom.appcontext.testobj.configobjectstest.propeconfigobject;
 
-import org.custom.annotations.BeanDef;
-import org.custom.annotations.ConfigBeanDefinitions;
-import org.custom.annotations.Default;
+import org.custom.core.annotations.BeanDef;
+import org.custom.core.annotations.ConfigBeanDefinitions;
+import org.custom.core.annotations.Default;
 
 @ConfigBeanDefinitions
 public class Config {
