@@ -26,7 +26,6 @@ public class UserController {
 
   @Put(url = "/users/{id}")
   public String updateUser(@PathVariable int id, @RequestBody User updatedUser) {
-    // Assume updating user data in the database
     return "User updated: " + updatedUser.name();
   }
 
@@ -37,7 +36,6 @@ public class UserController {
 
   @Patch(url = "/users/{id}")
   public String partialUpdateUser(@PathVariable int id, @RequestBody Map<String, Object> updates) {
-    // Assume partial updating user data in the database
     return updates.values().toString();
   }
 }
