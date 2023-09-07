@@ -1,6 +1,6 @@
 package org.custom.urlutil;
 
-import static org.custom.web.util.UrlUtil.getPathVariableNameValueMap;
+import static org.custom.web.util.UrlUtil.getPathVariableNameValueMapFromUrl;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -15,6 +15,9 @@ public class UrlUtilTest {
   @Test
   public void testMatchingUrlWithComplexPattern1() {
     Assertions.assertThat(UrlUtil.isMatching("users/123/james/abc", "users/{id}/{name}/abc"))
+        .isTrue();
+
+    Assertions.assertThat(UrlUtil.isMatching("products/name", "products/{id}"))
         .isTrue();
   }
 
@@ -349,8 +352,7 @@ public class UrlUtilTest {
     String url = "app/users/123/settings/notifications";
     String pattern = "app/users/{userId}/settings/notifications";
 
-    // Extract path variables and assert their values
-    Map<String, String> result = getPathVariableNameValueMap(url, pattern);
+    Map<String, String> result = getPathVariableNameValueMapFromUrl(url, pattern);
 
     assertEquals("123", result.get("userId"));
   }
@@ -360,8 +362,7 @@ public class UrlUtilTest {
     String url = "articles/2023/09/04/my-article";
     String pattern = "articles/{year}/{month}/{day}/{slug}";
 
-    // Extract path variables and assert their values
-    Map<String, String> result = getPathVariableNameValueMap(url, pattern);
+    Map<String, String> result = getPathVariableNameValueMapFromUrl(url, pattern);
 
     assertEquals("2023", result.get("year"));
     assertEquals("09", result.get("month"));
@@ -374,8 +375,7 @@ public class UrlUtilTest {
     String url = "users/123/posts/456/comments/789/likes/123";
     String pattern = "users/{userId}/posts/{postId}/comments/{commentId}/likes/{likeId}";
 
-    // Extract path variables and assert their values
-    Map<String, String> result = getPathVariableNameValueMap(url, pattern);
+    Map<String, String> result = getPathVariableNameValueMapFromUrl(url, pattern);
 
     assertEquals("123", result.get("userId"));
     assertEquals("456", result.get("postId"));
@@ -388,8 +388,7 @@ public class UrlUtilTest {
     String url = "categories/c1/c2/c3/c4/c5/c6";
     String pattern = "categories/{cat1}/{cat2}/{cat3}/{cat4}/{cat5}/{cat6}";
 
-    // Extract path variables and assert their values
-    Map<String, String> result = getPathVariableNameValueMap(url, pattern);
+    Map<String, String> result = getPathVariableNameValueMapFromUrl(url, pattern);
 
     assertEquals("c1", result.get("cat1"));
     assertEquals("c2", result.get("cat2"));
@@ -404,8 +403,7 @@ public class UrlUtilTest {
     String url = "store/products/123/details?color=blue&size=large";
     String pattern = "store/products/{productId}/details?color={color}&size={size}";
 
-    // Extract path variables and query parameters, and assert their values
-    Map<String, String> result = getPathVariableNameValueMap(url, pattern);
+    Map<String, String> result = getPathVariableNameValueMapFromUrl(url, pattern);
 
     assertEquals("123", result.get("productId"));
     assertEquals("blue", result.get("color"));
@@ -417,8 +415,7 @@ public class UrlUtilTest {
     String url = "app/users/123/settings/notifications/mode/silent";
     String pattern = "app/users/{userId}/settings/notifications/mode/{mode}";
 
-    // Extract path variables and assert their values
-    Map<String, String> result = getPathVariableNameValueMap(url, pattern);
+    Map<String, String> result = getPathVariableNameValueMapFromUrl(url, pattern);
 
     assertEquals("123", result.get("userId"));
     assertEquals("silent", result.get("mode"));
@@ -430,8 +427,7 @@ public class UrlUtilTest {
     String pattern =
         "example/{var1}/{var2}/{var3}/{var4}/{var5}/{var6}/{var7}/{var8}/{var9}/{var10}";
 
-    // Extract path variables and assert their values
-    Map<String, String> result = getPathVariableNameValueMap(url, pattern);
+    Map<String, String> result = getPathVariableNameValueMapFromUrl(url, pattern);
 
     assertEquals("a", result.get("var1"));
     assertEquals("b", result.get("var2"));
@@ -451,8 +447,7 @@ public class UrlUtilTest {
     String pattern =
         "example/{var1}/{var2}/{var3}/{var4}/{var5}/{var6}/{var7}/{var8}/{var9}/{var10}";
 
-    // Extract path variables and assert their values
-    Map<String, String> result = getPathVariableNameValueMap(url, pattern);
+    Map<String, String> result = getPathVariableNameValueMapFromUrl(url, pattern);
 
     assertEquals("one", result.get("var1"));
     assertEquals("two", result.get("var2"));
@@ -471,8 +466,7 @@ public class UrlUtilTest {
     String url = "app/users/123/settings/notifications";
     String pattern = "app/users/{userId}/settings/notifications";
 
-    // Extract path variables and assert their values
-    Map<String, String> result = getPathVariableNameValueMap(url, pattern);
+    Map<String, String> result = getPathVariableNameValueMapFromUrl(url, pattern);
 
     assertEquals("123", result.get("userId"));
   }
@@ -482,8 +476,7 @@ public class UrlUtilTest {
     String url = "articles/2023/09/04/my-article";
     String pattern = "articles/{year}/{month}/{day}/{slug}";
 
-    // Extract path variables and assert their values
-    Map<String, String> result = getPathVariableNameValueMap(url, pattern);
+    Map<String, String> result = getPathVariableNameValueMapFromUrl(url, pattern);
 
     assertEquals("2023", result.get("year"));
     assertEquals("09", result.get("month"));
@@ -496,8 +489,7 @@ public class UrlUtilTest {
     String url = "users/123/posts/456/comments/789/likes/123";
     String pattern = "users/{userId}/posts/{postId}/comments/{commentId}/likes/{likeId}";
 
-    // Extract path variables and assert their values
-    Map<String, String> result = getPathVariableNameValueMap(url, pattern);
+    Map<String, String> result = getPathVariableNameValueMapFromUrl(url, pattern);
 
     assertEquals("123", result.get("userId"));
     assertEquals("456", result.get("postId"));
@@ -510,8 +502,7 @@ public class UrlUtilTest {
     String url = "categories/c1/c2/c3/c4/c5/c6";
     String pattern = "categories/{cat1}/{cat2}/{cat3}/{cat4}/{cat5}/{cat6}";
 
-    // Extract path variables and assert their values
-    Map<String, String> result = getPathVariableNameValueMap(url, pattern);
+    Map<String, String> result = getPathVariableNameValueMapFromUrl(url, pattern);
 
     assertEquals("c1", result.get("cat1"));
     assertEquals("c2", result.get("cat2"));
@@ -526,8 +517,7 @@ public class UrlUtilTest {
     String url = "store/products/123/details?color=blue&size=large";
     String pattern = "store/products/{productId}/details?color={color}&size={size}";
 
-    // Extract path variables and query parameters, and assert their values
-    Map<String, String> result = getPathVariableNameValueMap(url, pattern);
+    Map<String, String> result = getPathVariableNameValueMapFromUrl(url, pattern);
 
     assertEquals("123", result.get("productId"));
     assertEquals("blue", result.get("color"));
@@ -539,8 +529,7 @@ public class UrlUtilTest {
     String url = "app/users/123/settings/notifications/mode/silent";
     String pattern = "app/users/{userId}/settings/notifications/mode/{mode}";
 
-    // Extract path variables and assert their values
-    Map<String, String> result = getPathVariableNameValueMap(url, pattern);
+    Map<String, String> result = getPathVariableNameValueMapFromUrl(url, pattern);
 
     assertEquals("123", result.get("userId"));
     assertEquals("silent", result.get("mode"));
@@ -551,7 +540,7 @@ public class UrlUtilTest {
     String url = "app/settings/notifications";
     String pattern = "app/users/{userId}/settings/notifications";
 
-    assertTrue(getPathVariableNameValueMap(url, pattern).isEmpty());
+    assertTrue(getPathVariableNameValueMapFromUrl(url, pattern).isEmpty());
   }
 
   @Test
@@ -559,8 +548,7 @@ public class UrlUtilTest {
     String url = "articles/2023/my-article";
     String pattern = "articles/{year}/{month}/{day}/{slug}";
 
-    // Ensure that the URL does not match the pattern
-    assertTrue(getPathVariableNameValueMap(url, pattern).isEmpty());
+    assertTrue(getPathVariableNameValueMapFromUrl(url, pattern).isEmpty());
   }
 
   @Test
@@ -568,8 +556,7 @@ public class UrlUtilTest {
     String url = "users/123/comments/789/likes/123";
     String pattern = "users/{userId}/posts/{postId}/comments/{commentId}/likes/{likeId}";
 
-    // Ensure that the URL does not match the pattern
-    assertTrue(getPathVariableNameValueMap(url, pattern).isEmpty());
+    assertTrue(getPathVariableNameValueMapFromUrl(url, pattern).isEmpty());
   }
 
   @Test
@@ -577,8 +564,7 @@ public class UrlUtilTest {
     String url = "categories/c1/c2/c3/c4";
     String pattern = "categories/{cat1}/{cat2}/{cat3}/{cat4}/{cat5}/{cat6}";
 
-    // Ensure that the URL does not match the pattern
-    assertTrue(getPathVariableNameValueMap(url, pattern).isEmpty());
+    assertTrue(getPathVariableNameValueMapFromUrl(url, pattern).isEmpty());
   }
 
   @Test
@@ -586,8 +572,7 @@ public class UrlUtilTest {
     String url = "store/products/123/details?color=blue";
     String pattern = "store/products/{productId}/details?color={color}&size={size}";
 
-    // Ensure that the URL does not match the pattern
-    assertTrue(getPathVariableNameValueMap(url, pattern).isEmpty());
+    assertTrue(getPathVariableNameValueMapFromUrl(url, pattern).isEmpty());
   }
 
   @Test
@@ -595,8 +580,7 @@ public class UrlUtilTest {
     String url = "app/users/settings/notifications/mode/silent";
     String pattern = "app/users/{userId}/settings/notifications/mode/{mode}";
 
-    // Ensure that the URL does not match the pattern
-    assertTrue(getPathVariableNameValueMap(url, pattern).isEmpty());
+    assertTrue(getPathVariableNameValueMapFromUrl(url, pattern).isEmpty());
   }
 
   @Test
@@ -605,8 +589,7 @@ public class UrlUtilTest {
     String pattern =
         "example/{var1}/{var2}/{var3}/{var4}/{var5}/{var6}/{var7}/{var8}/{var9}/{var10}";
 
-    // Ensure that the URL does not match the pattern
-    assertTrue(getPathVariableNameValueMap(url, pattern).isEmpty());
+    assertTrue(getPathVariableNameValueMapFromUrl(url, pattern).isEmpty());
   }
 
   @Test
@@ -615,18 +598,16 @@ public class UrlUtilTest {
     String pattern =
         "example/{var1}/{var2}/{var3}/{var4}/{var5}/{var6}/{var7}/{var8}/{var9}/{var10}";
 
-    // Ensure that the URL does not match the pattern
-    assertTrue(getPathVariableNameValueMap(url, pattern).isEmpty());
+    assertTrue(getPathVariableNameValueMapFromUrl(url, pattern).isEmpty());
   }
 
-  //  @Test
-  //  public void testGetPathVarValuesFromUrlNegative9() {
-  //    String url = "products/abc123/details?color=red&size=medium&category=electronics";
-  //    String pattern = "products/{productId}/details?color={color}&size={size}";
-  //
-  //    assertTrue(UrlUtil.getPathVarValuesFromUrl(url, pattern).isEmpty());
-  //  }
-  // TODO: 04.09.2023
+  @Test
+  public void testGetPathVarValuesFromUrlNegative9() {
+    String url = "products/abc123/details?color=red&size=medium&category=electronics";
+    String pattern = "products/{productId}/details?color={color}&size={size}";
+
+    assertTrue(UrlUtil.getPathVariableNameValueMapFromUrl(url, pattern).isEmpty());
+  }
 
   @Test
   public void testGetPathVarValuesFromUrlNegative10() {
@@ -634,6 +615,6 @@ public class UrlUtilTest {
     String pattern = "users/{userId}/posts/{postId}/comments/{commentId}";
 
     // Ensure that the URL does not match the pattern
-    assertTrue(getPathVariableNameValueMap(url, pattern).isEmpty());
+    assertTrue(getPathVariableNameValueMapFromUrl(url, pattern).isEmpty());
   }
 }

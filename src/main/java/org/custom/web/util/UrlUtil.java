@@ -11,8 +11,9 @@ import org.custom.web.annotations.Post;
 import org.custom.web.annotations.Put;
 
 public class UrlUtil {
-  public static Map<String, String> getPathVariableNameValueMap(
-      String requestUrl, String handlerUrl) { // TODO: 06.09.2023 change method name, it returns map
+
+  public static Map<String, String> getPathVariableNameValueMapFromUrl(
+      String requestUrl, String handlerUrl) {
     var map = new HashMap<String, String>();
     if (isMatching(requestUrl, handlerUrl)) {
       int i = 0;
@@ -48,7 +49,7 @@ public class UrlUtil {
     return map;
   }
 
-  public static Map<String, String> getRequestParamValuesFromUrl(
+  public static Map<String, String> getRequestParamValueMapFromUrl(
       String requestUrl, String handlerUrl) {
     var map = new HashMap<String, String>();
     if (isMatchingReqParam(requestUrl, handlerUrl)) {
@@ -75,12 +76,20 @@ public class UrlUtil {
     return map;
   }
 
+  public static boolean isMatchingReqParam(String requestUrl, String handlerUrl, Method method) {
+    if (ValueMatcher.valuesMatch(requestUrl, handlerUrl, method)) {
+      var result = deleteRequestParams(requestUrl);
+      return isMatching(result, handlerUrl);
+    }
+    return false; // TODO: 07.09.2023  or exception ?
+  }
+
   public static boolean isMatchingReqParam(String requestUrl, String handlerUrl) {
-    var result = deleteParams(requestUrl);
+    var result = deleteRequestParams(requestUrl);
     return isMatching(result, handlerUrl);
   }
 
-  public static String deleteParams(String requestUrl) {
+  public static String deleteRequestParams(String requestUrl) {
     int i = 0;
     var sb = new StringBuilder();
     boolean flag = true;
@@ -126,6 +135,53 @@ public class UrlUtil {
     }
   }
 
+  public static boolean isMatching(String requestUrl, String handlerUrl, Method method) {
+    if (ValueMatcher.valuesMatch(requestUrl, handlerUrl, method)) {
+      int j = 0;
+      int i = 0;
+      int slashCounterX = 0;
+      int slashCounterY = 0;
+      var charC = ' ';
+      var handle = new StringBuilder(handlerUrl);
+      handle.append(' ');
+      while (i < requestUrl.length() && j < handle.length()) {
+        if (handle.charAt(j) == '{') {
+          while (j < handle.length() && handle.charAt(j) != '}') {
+            j++;
+          }
+          j++;
+          charC = handle.charAt(j);
+          while (i < requestUrl.length() && requestUrl.charAt(i) != charC) {
+            if (i + 1 == requestUrl.length() && j + 1 == handle.length()) {
+              return slashCounterY == slashCounterX;
+            }
+            if (requestUrl.charAt(i) == '/') {
+              slashCounterX++;
+            }
+            i++;
+          }
+        }
+        if ((i >= requestUrl.length() && j < handle.length()
+            || i < requestUrl.length() && j >= handle.length())
+            || requestUrl.charAt(i) != handle.charAt(j)) {
+
+          return false;
+        }
+        if (requestUrl.charAt(i) == '/') {
+          slashCounterX++;
+        }
+        if (handle.charAt(j) == '/') {
+          slashCounterY++;
+        }
+        i++;
+        j++;
+      }
+
+      return handle.substring(j).trim().equals(requestUrl.substring(i));
+    }
+    return false; // TODO: 07.09.2023 or exception ?  
+  }
+
   public static boolean isMatching(String requestUrl, String handlerUrl) {
     int j = 0;
     int i = 0;
@@ -135,7 +191,7 @@ public class UrlUtil {
     var handle = new StringBuilder(handlerUrl);
     handle.append(' ');
     while (i < requestUrl.length() && j < handle.length()) {
-      if (handlerUrl.charAt(j) == '{') {
+      if (handle.charAt(j) == '{') {
         while (j < handle.length() && handle.charAt(j) != '}') {
           j++;
         }
@@ -152,7 +208,7 @@ public class UrlUtil {
         }
       }
       if ((i >= requestUrl.length() && j < handle.length()
-              || i < requestUrl.length() && j >= handle.length())
+          || i < requestUrl.length() && j >= handle.length())
           || requestUrl.charAt(i) != handle.charAt(j)) {
 
         return false;
@@ -174,36 +230,36 @@ public class UrlUtil {
       Method method,
       String requestUrl,
       Class<? extends Annotation> annotationCls,
-      StringBuilder sb) {
+      String sb) {
 
     switch (annotationCls.getSimpleName()) {
       case "Get" -> {
-        sb.append(getHandlerUrl("GET", method));
-        return isMatching(requestUrl, sb.toString())
-            || isMatchingReqParam(requestUrl, sb.toString()); // TODO: 04.09.2023
+        return isMatching(requestUrl, sb + getHandlerUrl("GET", method), method)
+            || isMatchingReqParam(requestUrl,
+            sb + getHandlerUrl("GET", method), method); // TODO: 04.09.2023
       }
       case "Post" -> {
-        sb.append(getHandlerUrl("POST", method));
-        return isMatching(requestUrl, sb.toString())
-            || isMatchingReqParam(requestUrl, sb.toString());
+        return isMatching(requestUrl, sb + getHandlerUrl("POST", method))
+            || isMatchingReqParam(requestUrl,
+            sb + getHandlerUrl("POST", method));
       }
 
       case "Put" -> {
-        sb.append(getHandlerUrl("PUT", method));
-        return isMatching(requestUrl, sb.toString())
-            || isMatchingReqParam(requestUrl, sb.toString());
+        return isMatching(requestUrl, sb + getHandlerUrl("PUT", method))
+            || isMatchingReqParam(requestUrl,
+            sb + getHandlerUrl("PUT", method));
       }
 
       case "Patch" -> {
-        sb.append(getHandlerUrl("PATCH", method));
-        return isMatching(requestUrl, sb.toString())
-            || isMatchingReqParam(requestUrl, sb.toString());
+        return isMatching(requestUrl, sb + getHandlerUrl("PATCH", method))
+            || isMatchingReqParam(requestUrl,
+            sb + getHandlerUrl("PATCH", method));
       }
 
       case "Delete" -> {
-        sb.append(getHandlerUrl("DELETE", method));
-        return isMatching(requestUrl, sb.toString())
-            || isMatchingReqParam(requestUrl, sb.toString());
+        return isMatching(requestUrl, sb + getHandlerUrl("DELETE", method))
+            || isMatchingReqParam(requestUrl,
+            sb + getHandlerUrl("DELETE", method));
       }
       default -> {
         return false; // todo

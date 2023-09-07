@@ -16,7 +16,7 @@ import org.custom.web.factory.DefaultComponentsFactory;
 import org.custom.web.initializer.ClassInitializer;
 import org.custom.web.valuegetter.ValueGetter;
 
-public class DefultRequestExecuter implements RequestExecuter{
+public class DefultRequestExecuter implements RequestExecuter {
 
   private static final Logger logger = Logger.getLogger("exception logger");
 
@@ -42,7 +42,6 @@ public class DefultRequestExecuter implements RequestExecuter{
 
     this.valueGetters.forEach(
         valueGetter -> {
-          System.out.println(valueGetter.getValuesFromRequest(exchange, method));
           params.addAll(valueGetter.getValuesFromRequest(exchange, method));
         });
 
@@ -55,10 +54,12 @@ public class DefultRequestExecuter implements RequestExecuter{
             });
     try {
       if (method.getParameters().length == 0) {
-        return method.invoke(new ClassInitializer().initialize(handler.right()), params.toArray());
+        return method.invoke(new ClassInitializer().initialize(handler.right()),
+            params.toArray());
       }
       if (method.getParameters().length > 0) {
-        return method.invoke(new ClassInitializer().initialize(handler.right()), params.toArray());
+        return method.invoke(new ClassInitializer().initialize(handler.right()),
+            params.toArray());
       }
 
     } catch (IllegalAccessException | InvocationTargetException e) {

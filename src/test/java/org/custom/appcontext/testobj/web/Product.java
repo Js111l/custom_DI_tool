@@ -1,13 +1,19 @@
 package org.custom.appcontext.testobj.web;
 
 public class Product {
+
   private int id;
   private String category;
   private String name;
-  public Product(int id, String category,String name){
-    this.category=category;
-    this.name=name;
-    this.id=id;
+
+  public Product() {
+
+  }
+
+  public Product(int id, String category, String name) {
+    this.category = category;
+    this.name = name;
+    this.id = id;
   }
 
   public String getName() {

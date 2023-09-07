@@ -1,4 +1,4 @@
-package org.custom.appcontext.testobj.web.testcontroller3;
+package org.custom.appcontext.testobj.web.allcontrollers;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -6,12 +6,12 @@ import java.util.stream.IntStream;
 import org.custom.appcontext.testobj.web.Product;
 import org.custom.web.annotations.Delete;
 import org.custom.web.annotations.Get;
+import org.custom.web.annotations.PathVariable;
 import org.custom.web.annotations.Post;
 import org.custom.web.annotations.Put;
 import org.custom.web.annotations.RequestBody;
 import org.custom.web.annotations.RequestParam;
 import org.custom.web.annotations.RestController;
-import org.custom.web.annotations.PathVariable;
 import org.custom.web.model.HttpStatusCode;
 import org.custom.web.model.RestResponse;
 

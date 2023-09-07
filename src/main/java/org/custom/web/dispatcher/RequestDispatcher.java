@@ -2,7 +2,6 @@ package org.custom.web.dispatcher;
 
 import static org.custom.web.handler.HandlerResolver.getHandler;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -42,9 +41,10 @@ public class RequestDispatcher implements HttpHandler {
 
     Object responseObject =
         executeRequest(exchange.getRequestMethod(), pairThrowableResult.getOrNull(), exchange);
+
     // response
     if (responseObject instanceof RestResponse restResponse) {
-      var content = getJson(restResponse.body());
+      var content = getJson(restResponse.body()); // TODO: 07.09.2023
       setResponse(content, restResponse.statusCode(), exchange);
       return;
     }
@@ -95,8 +95,8 @@ public class RequestDispatcher implements HttpHandler {
 
   private String getJson(Object responseObject) {
     try {
-      return new ObjectMapper().writeValueAsString(responseObject);
-    } catch (JsonProcessingException e) {
+      return new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(responseObject);
+    } catch (IOException e) {
       logger.log(Level.SEVERE, "An exception occurred:", e);
       System.exit(1);
     }
