@@ -47,6 +47,7 @@ public class DefaultContextInitializerFactory implements ContextInitializerFacto
             this.contextComponentFactory.createScanners(), this.classList, this.scannedClasses));
   }
 
+  @Override
   public Map<Class<?>, Object> getContext() {
     return context;
   }

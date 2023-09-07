@@ -12,7 +12,7 @@ import org.custom.web.model.RestResponse;
 public class ControllerWithWired {
 
   @Wired
-  Cat cat;
+  private Cat cat;
 
   @Get(url = "/cat/{id}")
   public RestResponse<String> getMeow(@PathVariable long id) {

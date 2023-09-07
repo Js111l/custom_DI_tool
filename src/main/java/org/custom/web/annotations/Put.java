@@ -8,5 +8,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(value = ElementType.METHOD)
 public @interface Put {
-  String url();
+
+  String url() default "";
 }

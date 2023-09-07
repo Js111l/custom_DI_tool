@@ -16,7 +16,7 @@ public class ClassInitializer implements Initializer {
   private final List<Class<?>> context;
   private final List<ContextChecker> contextCheckers;
 
-  private final Logger logger = Logger.getLogger("logger");
+  private static final Logger LOGGER = Logger.getLogger("logger");
 
   public ClassInitializer(List<Class<?>> context, List<ContextChecker> contextCheckers) {
     this.context = context;
@@ -25,13 +25,13 @@ public class ClassInitializer implements Initializer {
 
   @Override
   public Object initialize(Class<?> clazz) {
-    Object targetObject;
-    var constructor = getConstructor(clazz);
+    final var constructor = getConstructor(clazz);
+    Object initializedObject;
     try {
       if (constructor.getParameterCount() == ZERO) {
-        targetObject = constructor.newInstance();
+        initializedObject = constructor.newInstance();
       } else {
-        targetObject = constructor.newInstance(
+        initializedObject = constructor.newInstance(
             Arrays.stream(constructor.getParameterTypes()).map(paramClass -> {
               if (isNotInContext(paramClass)) {
                 throw new NoSuchBeanFoundException(
@@ -40,13 +40,15 @@ public class ClassInitializer implements Initializer {
               }
               return initialize(paramClass);
             }).toArray());
-        return targetObject;
       }
+      return initializedObject;
     } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
-      logger.log(Level.SEVERE, "An exception occurred " + e.getMessage());
+      if (LOGGER.isLoggable(Level.SEVERE)) {
+        LOGGER.log(Level.SEVERE, "An exception occurred " + e.getMessage());
+      }
       System.exit(1);
+      throw new RuntimeException(e);
     }
-    return null;
   }
 
   private boolean isNotInContext(Class<?> paramClass) {

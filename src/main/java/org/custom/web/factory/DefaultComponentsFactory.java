@@ -5,7 +5,7 @@ import org.custom.web.valuegetter.DefaultPathVariablesGetter;
 import org.custom.web.valuegetter.DefaultRequestParamGetter;
 import org.custom.web.valuegetter.ValueGetter;
 
-public class DefaultComponentsFactory implements WebComponentsFactory {
+public final class DefaultComponentsFactory implements WebComponentsFactory {
 
   @Override
   public List<ValueGetter> getValueGetters() {

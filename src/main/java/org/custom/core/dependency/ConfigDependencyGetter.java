@@ -9,14 +9,14 @@ import java.util.stream.Collectors;
 import org.custom.core.annotations.BeanDef;
 import org.custom.core.annotations.ConfigBeanDefinitions;
 
-public class ConfigDependencyGetter implements DependencyGetter<Class<?>, Class<?>> {
+public final class ConfigDependencyGetter implements DependencyGetter<Class<?>, Class<?>> {
 
   @Override
   public Map<Class<?>, List<Class<?>>> getDependencies(List<Class<?>> classes) {
-    var map = new HashMap<Class<?>, List<Class<?>>>();
+    final var map = new HashMap<Class<?>, List<Class<?>>>();
     classes.stream().filter(x -> x.isAnnotationPresent(ConfigBeanDefinitions.class))
         .forEach(configClass -> {
-          List<Class<?>> methods = Arrays.stream(configClass.getMethods())
+          final List<Class<?>> methods = Arrays.stream(configClass.getMethods())
               .filter(method -> method.isAnnotationPresent(
                   BeanDef.class)).map(Method::getReturnType)
               .collect(Collectors.toList());

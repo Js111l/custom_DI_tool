@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.custom.web.annotations.RestController;
 
-public class ControllerScanner implements Scanner<Class<?>>{
+public final class ControllerScanner implements Scanner<Class<?>>{
 
   @Override
   public List<Class<?>> getScannedComponentsFrom(List<Class<?>> scannedClasses) {

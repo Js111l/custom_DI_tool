@@ -12,10 +12,12 @@ import java.util.logging.Logger;
 public class ClassInspector {
 
   private String[] packagesToScan;
-  private final Logger logger = Logger.getLogger("logger");
+  private static final Logger LOGGER = Logger.getLogger("logger");
+  private static final String MAIN = "main";
+  private static final String TEST = "test";
 
   public ClassInspector(String... packagesToScan) {
-    this.packagesToScan = packagesToScan;
+    this.packagesToScan = Arrays.copyOf(packagesToScan, packagesToScan.length);
   }
 
   public ClassInspector() {
@@ -38,7 +40,7 @@ public class ClassInspector {
     return list;
   }
 
-  private boolean isNotEmpty(String[] packagesToScan) {
+  private boolean isNotEmpty(String... packagesToScan) {
     return packagesToScan.length > 0;
   }
 
@@ -46,21 +48,23 @@ public class ClassInspector {
     try {
       return Class.forName(className);
     } catch (ClassNotFoundException e) {
-      logger.log(Level.SEVERE, "An exception occurred " + e.getMessage());
+      if (LOGGER.isLoggable(Level.SEVERE)) {
+        LOGGER.log(Level.SEVERE, "An exception occurred " + e.getMessage());
+      }
       System.exit(1);
+      throw new RuntimeException(e);
     }
-    return null;
   }
 
   private List<String> getClassNameList() {
 
-    var paths = getClassPaths();
-    var classNames = new ArrayList<String>();
+    final var paths = getClassPaths();
+    final var classNames = new ArrayList<String>();
 
     Arrays.stream(paths)
         .forEach(
             path -> {
-              var file = new File(path);
+              final var file = new File(path);
               if (file.exists() && file.isDirectory()) {
                 collectClassNamesRecursively(file, classNames, new StringBuilder());
               }
@@ -70,7 +74,7 @@ public class ClassInspector {
   }
 
   private String[] getClassPaths() {
-    var classpath = System.getProperty("java.class.path");
+    final var classpath = System.getProperty("java.class.path");
     return classpath.split(File.pathSeparator);
   }
 
@@ -78,9 +82,9 @@ public class ClassInspector {
       File file, List<String> classes, StringBuilder packageName) {
 
     if (file.isDirectory()) {
-      int lastIndex = packageName.length();
+      final int lastIndex = packageName.length();
       appendDirName(packageName, file);
-      var directoryFiles = file.listFiles();
+      final var directoryFiles = file.listFiles();
       assert directoryFiles != null;
 
       Arrays.stream(directoryFiles)
@@ -90,16 +94,16 @@ public class ClassInspector {
 
       packageName.delete(lastIndex, packageName.length());
     } else {
-      var className = deleteClassSuffix(file.getName());
+      final var className = deleteClassSuffix(file.getName());
       classes.add(packageName + "." + className);
     }
   }
 
   private void appendDirName(StringBuilder packageName, File directory) {
-    if ("main".equals(directory.getName()) || "test".equals(directory.getName())) {
+    if (directory.getName().equals(MAIN) || directory.getName().equals(TEST)) {
       return;
     }
-    var dirName = directory.getName();
+    final var dirName = directory.getName();
     if (packageName.isEmpty()) {
       packageName.append(dirName);
     } else {

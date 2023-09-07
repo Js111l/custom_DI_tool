@@ -15,9 +15,9 @@ import java.util.logging.Logger;
 import org.custom.core.annotations.Default;
 import org.custom.core.exceptions.DuplicateBeansFound;
 
-public class BeanDefinitonInjector extends Injector {
+public final class BeanDefinitonInjector extends Injector {
 
-  private final Logger logger = Logger.getLogger("logger");
+  private static final Logger LOGGER = Logger.getLogger("logger");
 
   @Override
   public void setContainerBeans(Map<Class<?>, Object> containerBeans) {
@@ -32,8 +32,8 @@ public class BeanDefinitonInjector extends Injector {
 
   @Override
   public void inject() {
-    var beanDefClasses = getConfigBeanDefClasses(classSet);
-    var configClassMethodsMap = getConfigClassMethodsMap(beanDefClasses, containerBeans);
+    final var beanDefClasses = getConfigBeanDefClasses(classSet);
+    final var configClassMethodsMap = getConfigClassMethodsMap(beanDefClasses, containerBeans);
 
     configClassMethodsMap.forEach((objectClassPair, methods) -> {
       Method method;
@@ -47,11 +47,12 @@ public class BeanDefinitonInjector extends Injector {
         method = methods.get(FIRST_ELEMENT);
       }
       try {
-        var returnedBean = method.invoke(objectClassPair.left());
+        final var returnedBean = method.invoke(objectClassPair.left());
         this.containerBeans.put(returnedBean.getClass(), returnedBean);
       } catch (IllegalAccessException | InvocationTargetException e) {
-        logger.log(Level.SEVERE, "An exception occurred " + e.getMessage());
-        System.exit(1);
+        if (LOGGER.isLoggable(Level.SEVERE)) {
+          LOGGER.log(Level.SEVERE, "An exception occurred " + e.getMessage());
+        }
       }
     });
   }

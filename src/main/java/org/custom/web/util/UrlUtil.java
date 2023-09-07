@@ -14,32 +14,32 @@ public class UrlUtil {
 
   public static Map<String, String> getPathVariableNameValueMapFromUrl(
       String requestUrl, String handlerUrl) {
-    var map = new HashMap<String, String>();
+    final var map = new HashMap<String, String>();
     if (isMatching(requestUrl, handlerUrl)) {
       int i = 0;
       int j = 0;
       while (i < requestUrl.length() && j < handlerUrl.length()) {
         var handle = new StringBuilder(handlerUrl);
         handle.append(' ');
-        var sb = new StringBuilder();
-        var sb2 = new StringBuilder();
-        var charC = ' ';
+        var varName = new StringBuilder();
+        var varValue = new StringBuilder();
+        var lastChar = ' ';
 
         if (handlerUrl.charAt(j) == '{') {
           j++;
           while (handlerUrl.charAt(j) != '}') {
-            sb.append(handlerUrl.charAt(j));
+            varName.append(handlerUrl.charAt(j));
             j++;
           }
 
-          charC = handle.charAt(j + 1);
-          while (i < requestUrl.length() && requestUrl.charAt(i) != charC) {
-            sb2.append(requestUrl.charAt(i));
+          lastChar = handle.charAt(j + 1);
+          while (i < requestUrl.length() && requestUrl.charAt(i) != lastChar) {
+            varValue.append(requestUrl.charAt(i));
             i++;
           }
           i--;
 
-          map.put(sb.toString(), sb2.toString());
+          map.put(varName.toString(), varValue.toString());
           continue;
         }
         j++;
@@ -80,8 +80,9 @@ public class UrlUtil {
     if (ValueMatcher.valuesMatch(requestUrl, handlerUrl, method)) {
       var result = deleteRequestParams(requestUrl);
       return isMatching(result, handlerUrl);
+    } else {
+      return false;
     }
-    return false;
   }
 
   public static boolean isMatchingReqParam(String requestUrl, String handlerUrl) {
@@ -91,7 +92,8 @@ public class UrlUtil {
 
   public static String deleteRequestParams(String requestUrl) {
     int i = 0;
-    var sb = new StringBuilder();
+
+    var updatedRequestUrl = new StringBuilder();
     boolean flag = true;
     boolean passedEqualSign = false;
 
@@ -115,23 +117,24 @@ public class UrlUtil {
         continue;
       }
       if (flag) {
-        sb.append(requestUrl.charAt(i));
+        updatedRequestUrl.append(requestUrl.charAt(i));
       }
       i++;
     }
     //    if (sb.charAt(sb.length() - 1) == '/') {
     //      sb.deleteCharAt(sb.length() - 1); // TODO: 06.09.2023 /
     //    }
-    return sb.toString();
+    return updatedRequestUrl.toString();
   }
 
   private static void appendValue(StringBuilder value, int index, String requestUrl) {
-    while (index < requestUrl.length()) {
-      if (requestUrl.charAt(index) == '/' || requestUrl.charAt(index) == '&') {
+    var j = index;
+    while (j < requestUrl.length()) {
+      if (requestUrl.charAt(j) == '/' || requestUrl.charAt(j) == '&') {
         break;
       }
-      value.append(requestUrl.charAt(index));
-      index++;
+      value.append(requestUrl.charAt(j));
+      j++;
     }
   }
 
@@ -139,20 +142,24 @@ public class UrlUtil {
     if (ValueMatcher.valuesMatch(requestUrl, handlerUrl, method)) {
       int j = 0;
       int i = 0;
+
       int slashCounterX = 0;
       int slashCounterY = 0;
-      var charC = ' ';
-      var handle = new StringBuilder(handlerUrl);
-      handle.append(' ');
-      while (i < requestUrl.length() && j < handle.length()) {
-        if (handle.charAt(j) == '{') {
-          while (j < handle.length() && handle.charAt(j) != '}') {
+
+      var lastChar = ' ';
+
+      var handlerUrlStringBuilder = new StringBuilder(handlerUrl);
+      handlerUrlStringBuilder.append(' ');
+
+      while (i < requestUrl.length() && j < handlerUrlStringBuilder.length()) {
+        if (handlerUrlStringBuilder.charAt(j) == '{') {
+          while (j < handlerUrlStringBuilder.length() && handlerUrlStringBuilder.charAt(j) != '}') {
             j++;
           }
           j++;
-          charC = handle.charAt(j);
-          while (i < requestUrl.length() && requestUrl.charAt(i) != charC) {
-            if (i + 1 == requestUrl.length() && j + 1 == handle.length()) {
+          lastChar = handlerUrlStringBuilder.charAt(j);
+          while (i < requestUrl.length() && requestUrl.charAt(i) != lastChar) {
+            if (i + 1 == requestUrl.length() && j + 1 == handlerUrlStringBuilder.length()) {
               return slashCounterY == slashCounterX;
             }
             if (requestUrl.charAt(i) == '/') {
@@ -161,23 +168,22 @@ public class UrlUtil {
             i++;
           }
         }
-        if ((i >= requestUrl.length() && j < handle.length()
-            || i < requestUrl.length() && j >= handle.length())
-            || requestUrl.charAt(i) != handle.charAt(j)) {
-
+        if ((i >= requestUrl.length() && j < handlerUrlStringBuilder.length()
+            || i < requestUrl.length() && j >= handlerUrlStringBuilder.length())
+            || requestUrl.charAt(i) != handlerUrlStringBuilder.charAt(j)) {
           return false;
         }
         if (requestUrl.charAt(i) == '/') {
           slashCounterX++;
         }
-        if (handle.charAt(j) == '/') {
+        if (handlerUrlStringBuilder.charAt(j) == '/') {
           slashCounterY++;
         }
         i++;
         j++;
       }
 
-      return handle.substring(j).trim().equals(requestUrl.substring(i));
+      return handlerUrlStringBuilder.substring(j).trim().equals(requestUrl.substring(i));
     }
     return false; // TODO: 07.09.2023 or exception ?  
   }
@@ -185,20 +191,23 @@ public class UrlUtil {
   public static boolean isMatching(String requestUrl, String handlerUrl) {
     int j = 0;
     int i = 0;
+
     int slashCounterX = 0;
     int slashCounterY = 0;
-    var charC = ' ';
-    var handle = new StringBuilder(handlerUrl);
-    handle.append(' ');
-    while (i < requestUrl.length() && j < handle.length()) {
-      if (handle.charAt(j) == '{') {
-        while (j < handle.length() && handle.charAt(j) != '}') {
+
+    var lastChar = ' ';
+    var handlerUrlStringBuilder = new StringBuilder(handlerUrl);
+
+    handlerUrlStringBuilder.append(' ');
+    while (i < requestUrl.length() && j < handlerUrlStringBuilder.length()) {
+      if (handlerUrlStringBuilder.charAt(j) == '{') {
+        while (j < handlerUrlStringBuilder.length() && handlerUrlStringBuilder.charAt(j) != '}') {
           j++;
         }
         j++;
-        charC = handle.charAt(j);
-        while (i < requestUrl.length() && requestUrl.charAt(i) != charC) {
-          if (i + 1 == requestUrl.length() && j + 1 == handle.length()) {
+        lastChar = handlerUrlStringBuilder.charAt(j);
+        while (i < requestUrl.length() && requestUrl.charAt(i) != lastChar) {
+          if (i + 1 == requestUrl.length() && j + 1 == handlerUrlStringBuilder.length()) {
             return slashCounterY == slashCounterX;
           }
           if (requestUrl.charAt(i) == '/') {
@@ -207,23 +216,23 @@ public class UrlUtil {
           i++;
         }
       }
-      if ((i >= requestUrl.length() && j < handle.length()
-          || i < requestUrl.length() && j >= handle.length())
-          || requestUrl.charAt(i) != handle.charAt(j)) {
+      if ((i >= requestUrl.length() && j < handlerUrlStringBuilder.length()
+          || i < requestUrl.length() && j >= handlerUrlStringBuilder.length())
+          || requestUrl.charAt(i) != handlerUrlStringBuilder.charAt(j)) {
 
         return false;
       }
       if (requestUrl.charAt(i) == '/') {
         slashCounterX++;
       }
-      if (handle.charAt(j) == '/') {
+      if (handlerUrlStringBuilder.charAt(j) == '/') {
         slashCounterY++;
       }
       i++;
       j++;
     }
 
-    return handle.substring(j).trim().equals(requestUrl.substring(i));
+    return handlerUrlStringBuilder.substring(j).trim().equals(requestUrl.substring(i));
   }
 
   public static boolean hasMatchingUrl(
@@ -231,61 +240,49 @@ public class UrlUtil {
       String requestUrl,
       Class<? extends Annotation> annotationCls,
       String sb) {
-
+    boolean result;
     switch (annotationCls.getSimpleName()) {
-      case "Get" -> {
-        return isMatching(requestUrl, sb + getHandlerUrl("GET", method), method)
-            || isMatchingReqParam(requestUrl,
-            sb + getHandlerUrl("GET", method), method);
-      }
-      case "Post" -> {
-        return isMatching(requestUrl, sb + getHandlerUrl("POST", method))
-            || isMatchingReqParam(requestUrl,
-            sb + getHandlerUrl("POST", method));
-      }
+      case "Get" -> result = isMatching(requestUrl, sb + getHandlerUrl("GET", method), method)
+          || isMatchingReqParam(requestUrl,
+          sb + getHandlerUrl("GET", method), method);
 
-      case "Put" -> {
-        return isMatching(requestUrl, sb + getHandlerUrl("PUT", method))
-            || isMatchingReqParam(requestUrl,
-            sb + getHandlerUrl("PUT", method));
-      }
+      case "Post" -> result = isMatching(requestUrl, sb + getHandlerUrl("POST", method))
+          || isMatchingReqParam(requestUrl,
+          sb + getHandlerUrl("POST", method));
 
-      case "Patch" -> {
-        return isMatching(requestUrl, sb + getHandlerUrl("PATCH", method))
-            || isMatchingReqParam(requestUrl,
-            sb + getHandlerUrl("PATCH", method));
-      }
+      case "Put" -> result = isMatching(requestUrl, sb + getHandlerUrl("PUT", method))
+          || isMatchingReqParam(requestUrl,
+          sb + getHandlerUrl("PUT", method));
 
-      case "Delete" -> {
-        return isMatching(requestUrl, sb + getHandlerUrl("DELETE", method))
-            || isMatchingReqParam(requestUrl,
-            sb + getHandlerUrl("DELETE", method));
-      }
-      default -> {
-        return false;
-      }
+      case "Patch" -> result = isMatching(requestUrl, sb + getHandlerUrl("PATCH", method))
+          || isMatchingReqParam(requestUrl,
+          sb + getHandlerUrl("PATCH", method));
+
+      case "Delete" -> result = isMatching(requestUrl, sb + getHandlerUrl("DELETE", method))
+          || isMatchingReqParam(requestUrl,
+          sb + getHandlerUrl("DELETE", method));
+
+      default ->
+          throw new IllegalStateException("Unexpected value: " + annotationCls.getSimpleName());
     }
+    return result;
   }
 
   public static String getHandlerUrl(String requestMethod, Method handler) {
-
+    var url = "";
     switch (requestMethod) {
-      case "GET" -> {
-        return handler.getAnnotation(Get.class).url();
-      }
-      case "POST" -> {
-        return handler.getAnnotation(Post.class).url();
-      }
-      case "PUT" -> {
-        return handler.getAnnotation(Put.class).url();
-      }
-      case "PATCH" -> {
-        return handler.getAnnotation(Patch.class).url();
-      }
-      case "DELETE" -> {
-        return handler.getAnnotation(Delete.class).url();
-      }
+      case "GET" -> url = handler.getAnnotation(Get.class).url();
+
+      case "POST" -> url = handler.getAnnotation(Post.class).url();
+
+      case "PUT" -> url = handler.getAnnotation(Put.class).url();
+
+      case "PATCH" -> url = handler.getAnnotation(Patch.class).url();
+
+      case "DELETE" -> url = handler.getAnnotation(Delete.class).url();
+
+      default -> throw new IllegalStateException("Unexpected value: " + requestMethod);
     }
-    return "";
+    return url;
   }
 }

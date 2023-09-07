@@ -1,7 +1,5 @@
 package org.custom.web;
 
-import org.custom.appcontext.testobj.web.allcontrollers.ControllerWithWired;
-import org.custom.core.annotations.Item;
 import org.custom.core.appcontext.AppContext;
 import org.junit.jupiter.api.Test;
 
@@ -24,39 +22,31 @@ public class WebContextTest {
    */
   @Test
   public void priceControllerTest() {
-    var context = new AppContext(PRICE_CONTROLLER_TEST);
-    while (true) {
-
-    }
+    initialize(PRICE_CONTROLLER_TEST);
   }
 
   @Test
   public void userControllerTest() {
-    var context = new AppContext(USER_CONTROLLER_TEST);
-    while (true) {
-
-    }
+    initialize(USER_CONTROLLER_TEST);
   }
 
   @Test
   public void productControllerTest() {
-    var context = new AppContext(PRODUCT_CONTROLLER_TEST);
-    while (true) {
-
-    }
+    initialize(PRODUCT_CONTROLLER_TEST);
   }
 
   @Test
   public void controllersWithDiTest() {
-    var context = new AppContext(CONTROLLERS_WITH_DI_TEST);
-    while (true) {
-
-    }
+    initialize(CONTROLLERS_WITH_DI_TEST);
   }
 
   @Test
   public void allControllersTest() {
-    var context = new AppContext(ALL_CONTROLLERS_TEST);
+    initialize(ALL_CONTROLLERS_TEST);
+  }
+
+  private void initialize(String packageName) {
+    new AppContext(packageName);
     while (true) {
 
     }

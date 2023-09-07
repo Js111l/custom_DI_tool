@@ -7,14 +7,16 @@ import org.custom.web.util.result.Result;
 public final class ValueMatcher {
 
   public static boolean valuesMatch(String requestUrl, String handlerUrl, Method method) {
-    var map = UrlUtil.getPathVariableNameValueMapFromUrl(requestUrl, handlerUrl);
-    var params = method.getParameters();
+    final var map = UrlUtil.getPathVariableNameValueMapFromUrl(requestUrl, handlerUrl);
+    final var params = method.getParameters();
 
     if (containsPathVariables(map)) {
       for (int i = 0; i < params.length; i++) {
-        if (!map.containsKey(params[i].getName())) {
-          return false;
-        } else if (isCastIsNotPossible(map.get(params[i].getName()), params[i].getType())) {
+        if (map.containsKey(params[i].getName())) {
+          if (isCastIsNotPossible(map.get(params[i].getName()), params[i].getType())) {
+            return false;
+          }
+        } else {
           return false;
         }
       }
@@ -24,7 +26,7 @@ public final class ValueMatcher {
   }
 
   private static boolean containsPathVariables(Map<String, String> map) {
-    return map.size() > 0;
+    return !map.isEmpty();
   }
 
   private static boolean isCastIsNotPossible(String value, Class<?> type) {

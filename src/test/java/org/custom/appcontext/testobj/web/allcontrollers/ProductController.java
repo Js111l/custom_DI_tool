@@ -26,10 +26,12 @@ public class ProductController {
   }
 
   private List<Product> getProducts() {
-    var list = IntStream.rangeClosed(0, 20).mapToObj(x -> new Product(x, "men.jeans", "Levis")).collect(
-        Collectors.toList());
+    var list = IntStream.rangeClosed(0, 20).mapToObj(x -> new Product(x, "men.jeans", "Levis"))
+        .collect(
+            Collectors.toList());
     list.addAll(
-        IntStream.rangeClosed(21, 40).mapToObj(x -> new Product(x, "women.jeans", "Wrangler")).toList());
+        IntStream.rangeClosed(21, 40).mapToObj(x -> new Product(x, "women.jeans", "Wrangler"))
+            .toList());
     return list;
   }
 

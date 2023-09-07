@@ -7,13 +7,16 @@ import java.util.logging.Logger;
 
 public final class ServerRunner {
 
-  private static final Logger logger = Logger.getLogger("logger");
+  private static final Logger LOGGER = Logger.getLogger("logger");
 
   public static void runServer(HttpServer server, HttpHandler handler) {
     server.createContext("/", handler);
-    logger.log(Level.INFO, "Initializing server");
+    if (LOGGER.isLoggable(Level.INFO)) {
+      LOGGER.log(Level.INFO, "Initializing server");
+    }
     server.start();
-    logger.log(Level.INFO,
-        ("Server listening on port: " + server.getAddress().getPort()));
+    if (LOGGER.isLoggable(Level.INFO)) {
+      LOGGER.log(Level.INFO, "Server listening on port: " + server.getAddress().getPort());
+    }
   }
 }

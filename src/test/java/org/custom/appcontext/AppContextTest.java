@@ -50,41 +50,41 @@ class AppContextTest {
 
   // - Simple Dependency Injection Tests
   @Test
-  public void appContext_properDirectoryPath_properObjectsInContext() {
+  void appContext_properDirectoryPath_properObjectsInContext() {
     AppContext context = new AppContext(SIMPLE_DI_TESTOBJECTS_PACKAGE);
     assertThat(context.getContext().size()).isEqualTo(2);
   }
 
   @Test
-  public void appContext_invalidDirectoryPath_noObjectsInContext() {
+  void appContext_invalidDirectoryPath_noObjectsInContext() {
     AppContext context = new AppContext("invalid directory");
     assertThat(context.getContext().size()).isEqualTo(0);
   }
 
   @Test
-  public void getItem_beanClass_properlyInjectedObject() {
+  void getItem_beanClass_properlyInjectedObject() {
     CustomApplicationContext context = new AppContext(SIMPLE_DI_TESTOBJECTS_PACKAGE);
     A obj = (A) context.getItem(A.class);
     assertThat(obj.getB()).isNotNull();
   }
 
   @Test
-  public void getItem_beanClass_injectedObjectOfProperType() {
+  void getItem_beanClass_injectedObjectOfProperType() {
     CustomApplicationContext context = new AppContext(SIMPLE_DI_TESTOBJECTS_PACKAGE);
     A obj = (A) context.getItem(A.class);
     assertThat(obj.getB()).isInstanceOf(B.class);
   }
 
   @Test
-  public void getItem_classToInjectNotInContext_properlyInjectedObject() {
+  void getItem_classToInjectNotInContext_properlyInjectedObject() {
     assertThatThrownBy(
-            () -> new AppContext(SIMPLE_DI_TESTOBJECTS_CLASS_TO_INJECT_NOT_IN_CONTEXT_PACKAGE))
+        () -> new AppContext(SIMPLE_DI_TESTOBJECTS_CLASS_TO_INJECT_NOT_IN_CONTEXT_PACKAGE))
         .isInstanceOf(NoSuchBeanFoundException.class);
   }
 
   // - Simple Dependency Injection Tests ^^
   @Test
-  public void getItem_ConfigClassWithDefaultAnnotation_properObjectInContext() {
+  void getItem_ConfigClassWithDefaultAnnotation_properObjectInContext() {
     CustomApplicationContext context = new AppContext(PROPER_CONFIG_TESTOBJECTS_PACKAGE);
     var exampleObj = (ExampleObj) context.getItem(ExampleObj.class);
     var cObject = (ObjectC) context.getItem(ObjectC.class);
@@ -96,53 +96,53 @@ class AppContextTest {
   }
 
   @Test
-  public void getItem_ConfigClassNoDefaultAnnotation_duplicateBeansExceptionThrown() {
+  void getItem_ConfigClassNoDefaultAnnotation_duplicateBeansExceptionThrown() {
     assertThatThrownBy(() -> new AppContext(INVALID_CONFIG_TESTOBJECTS_PACKAGE))
         .isInstanceOf(DuplicateBeansFound.class);
   }
 
   @Test
-  public void getItem_notAnnotatedObjectC2_noSuchBeanExceptionThrown() {
+  void getItem_notAnnotatedObjectC2_noSuchBeanExceptionThrown() {
     AppContext context = new AppContext(PROPER_CONFIG_TESTOBJECTS2_PACKAGE);
     assertThatThrownBy(() -> context.getItem(ObjectC2.class))
         .isInstanceOf(NoSuchBeanFoundException.class);
   }
 
   @Test
-  public void getItem_defaultAnnotatedBeanOutsideConfigClass_properlyInitializedBean() {
+  void getItem_defaultAnnotatedBeanOutsideConfigClass_properlyInitializedBean() {
     AppContext context = new AppContext(DEFAULT_ANNOTATION_TESTOBJECT_PACKAGE);
     assertThat(context.getItem(DefaultTest.class)).isNotNull();
   }
 
   @Test
-  public void getItem_duplicateBeanOutsideConfig_duplicateBeanExceptionThrown() {
+  void getItem_duplicateBeanOutsideConfig_duplicateBeanExceptionThrown() {
     assertThatThrownBy(() -> new AppContext(NO_DEFAULT_ANNOTATION_TESTOBJECT_PACKAGE))
         .isInstanceOf(DuplicateBeansFound.class);
   }
 
   @Test
-  public void getItem_getObjectByItsInterfaceNoDefaultAnnotation_duplicateBeanExceptionThrown() {
+  void getItem_getObjectByItsInterfaceNoDefaultAnnotation_duplicateBeanExceptionThrown() {
     var context = new AppContext(NO_DEFAULT_ANNOTATION_SAMEINTERFACE_TESTOBJECTS_PACKAGE);
     assertThatThrownBy(() -> context.getItem(MessageService.class))
         .isInstanceOf(DuplicateBeansFound.class);
   }
 
   @Test
-  public void getItem_getObjectByItsInterface_properDefaultAnnotatedObject() {
+  void getItem_getObjectByItsInterface_properDefaultAnnotatedObject() {
     var context = new AppContext(DEFAULT_ANNOTATION_SAMEINTERFACE_TESTOBJECTS_PACKAGE);
     var result = context.getItem(MessageService2.class);
     assertThat(result).isInstanceOf(EmailService2.class);
   }
 
   @Test
-  public void getItem_duplicateDefaultBeansInsideConfig_duplicateBeansExceptionThrown() {
+  void getItem_duplicateDefaultBeansInsideConfig_duplicateBeansExceptionThrown() {
     assertThatThrownBy(
-            () -> new AppContext(DUPLICATE_DEFAULT_INSIDECONFIG_ANNOTATION_TESTOBJECTS_PACKAGE))
+        () -> new AppContext(DUPLICATE_DEFAULT_INSIDECONFIG_ANNOTATION_TESTOBJECTS_PACKAGE))
         .isInstanceOf(DuplicateBeansFound.class);
   }
 
   @Test
-  public void getItem_duplicateDefaultBeansOutsideConfig_duplicateBeansExceptionThrown() {
+  void getItem_duplicateDefaultBeansOutsideConfig_duplicateBeansExceptionThrown() {
     var context = new AppContext(DUPLICATE_DEFAULT_OUTSIDECONFIG_ANNOTATION_TESTOBJECTS_PACKAGE);
     assertThatThrownBy(() -> context.getItem(MessageService3.class))
         .isInstanceOf(DuplicateBeansFound.class);

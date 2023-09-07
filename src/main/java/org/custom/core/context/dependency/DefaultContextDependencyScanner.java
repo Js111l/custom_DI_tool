@@ -24,10 +24,10 @@ public class DefaultContextDependencyScanner implements ContextDependencyScanner
 
   @Override
   public void scanDependencies() {
-    var classAllDependenciesMap = new HashMap<Class<?>, List<Class<?>>>();
+    final var classAllDependenciesMap = new HashMap<Class<?>, List<Class<?>>>();
     populateMap(classAllDependenciesMap);
 
-    var dependencyInspector = new DependencyInspector();
+    final var dependencyInspector = new DependencyInspector();
     dependencyInspector.checkForCycles(classAllDependenciesMap);
     dependencyInspector.checkForDuplicates(classAllDependenciesMap, this.duplicateCheckers);
   }
@@ -35,7 +35,7 @@ public class DefaultContextDependencyScanner implements ContextDependencyScanner
   @SuppressWarnings("unchecked")
   private void populateMap(Map<Class<?>, List<Class<?>>> classAllDependenciesMap) {
     this.dependencyGetters.forEach(dependencyGetter -> {
-      var dependencies = dependencyGetter.getDependencies(this.items);
+      final var dependencies = dependencyGetter.getDependencies(this.items);
       dependencies.forEach((key, value1) -> classAllDependenciesMap.computeIfAbsent(key,
           value -> (List<Class<?>>) value1));
     });

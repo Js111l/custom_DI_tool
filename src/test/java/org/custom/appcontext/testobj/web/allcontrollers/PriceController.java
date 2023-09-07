@@ -33,6 +33,6 @@ public class PriceController {
 
   @Delete(url = "/prices/{productId}")
   public String deletePrice(@PathVariable() long productId) {
-    return "Deleted: " + String.valueOf(productId);
+    return "Deleted: " + productId;
   }
 }

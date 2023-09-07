@@ -9,18 +9,18 @@ import java.util.Map.Entry;
 import org.custom.core.annotations.ConfigBeanDefinitions;
 import org.custom.core.annotations.Item;
 
-public class ItemConfigDuplicateChecker implements DuplicateChecker {
+public final class ItemConfigDuplicateChecker implements DuplicateChecker {
 
   @Override
   public Multimap<Class<?>, Class<?>> findDuplicates(
       Map<Class<?>, List<Class<?>>> classAllDependenciesMap) {
-    var duplicates = ArrayListMultimap.<Class<?>, Class<?>>create();
+    final var duplicates = ArrayListMultimap.<Class<?>, Class<?>>create();
 
     classAllDependenciesMap.entrySet().stream().filter(entry -> entry.getKey().isAnnotationPresent(
             ConfigBeanDefinitions.class)).map(entry -> entry.getValue()).flatMap(Collection::stream)
         .forEach(value -> {
           if (classAllDependenciesMap.containsKey(value)) {
-            var key = getKeyFromValue(value, classAllDependenciesMap);
+            final var key = getKeyFromValue(value, classAllDependenciesMap);
             if (!key.isAnnotationPresent(Item.class)) {
               duplicates.put(value, value);
             }

@@ -17,12 +17,12 @@ public final class DefaultRequestParamGetter extends ValueGetter {
 
   @Override
   public List<Object> getValuesFromRequest(HttpExchange exchange, Method handler) {
-    var urlFromRequest = exchange.getRequestURI().toString();
-    var urlFromHandler = getHandlerUrl(exchange.getRequestMethod(), handler);
+    final var urlFromRequest = exchange.getRequestURI().toString();
+    final var urlFromHandler = getHandlerUrl(exchange.getRequestMethod(), handler);
 
-    var map = UrlUtil.getRequestParamValueMapFromUrl(urlFromRequest, urlFromHandler);
+    final var map = UrlUtil.getRequestParamValueMapFromUrl(urlFromRequest, urlFromHandler);
 
-    var params = new ArrayList<>();
+    final var params = new ArrayList<>();
     AtomicInteger counter = new AtomicInteger();
 
     try {
@@ -44,7 +44,9 @@ public final class DefaultRequestParamGetter extends ValueGetter {
         // TODO: 06.09.2023
       }
     } catch (Exception e) {
-      logger.log(Level.SEVERE, e.getMessage());
+      if (LOGGER.isLoggable(Level.SEVERE)) {
+        LOGGER.log(Level.SEVERE, "An exception occurred " + e.getMessage());
+      }
       System.exit(1);
     }
     return params;

@@ -8,9 +8,9 @@ import java.util.logging.Logger;
 import org.custom.core.dependency.FieldDependencyGetter;
 import org.custom.core.initializer.ClassInitializer;
 
-public class FieldInjector extends Injector {
+public final class FieldInjector extends Injector {
 
-  private final Logger logger = Logger.getLogger("exception logger");
+  private static final Logger LOGGER = Logger.getLogger("exception logger");
 
   @Override
   public void setContainerBeans(Map<Class<?>, Object> containerBeans) {
@@ -25,26 +25,27 @@ public class FieldInjector extends Injector {
 
   @Override
   public void inject() {
-    var classFieldsMap = new FieldDependencyGetter().getDependencies(
+    final var classFieldsMap = new FieldDependencyGetter().getDependencies(
         this.classSet.stream().toList());
 
     classFieldsMap.keySet().forEach(aClass -> {
       if (containerBeans.get(aClass) != null) {
-        var obj = containerBeans.get(aClass);
-        var unInitializedFields = classFieldsMap.get(aClass);
+        final var obj = containerBeans.get(aClass);
+        final var unInitializedFields = classFieldsMap.get(aClass);
 
         unInitializedFields.forEach(field -> {
           var initializer = new ClassInitializer(this.classSet,
               List.of());
 
-          var fieldType = field.getType();
-          var initializedObject = initializer.initialize(fieldType);
+          final var fieldType = field.getType();
+          final var initializedObject = initializer.initialize(fieldType);
           field.setAccessible(true);
           try {
             field.set(obj, initializedObject);
           } catch (IllegalAccessException e) {
-            logger.log(Level.SEVERE, "An exception occurred " + e.getMessage());
-            System.exit(1);
+            if (LOGGER.isLoggable(Level.SEVERE)) {
+              LOGGER.log(Level.SEVERE, "An exception occurred " + e.getMessage());
+            }
           }
           containerBeans.put(obj.getClass(), obj);
         });

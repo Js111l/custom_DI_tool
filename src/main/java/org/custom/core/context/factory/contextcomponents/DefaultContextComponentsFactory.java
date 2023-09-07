@@ -18,7 +18,7 @@ import org.custom.core.scanner.ControllerScanner;
 import org.custom.core.scanner.ItemScanner;
 import org.custom.core.scanner.Scanner;
 
-public class DefaultContextComponentsFactory implements ContextComponentsFactory {
+public final class DefaultContextComponentsFactory implements ContextComponentsFactory {
 
   @Override
   public List<Injector> createInjectors() {

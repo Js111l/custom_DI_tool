@@ -5,6 +5,7 @@ import static org.custom.web.util.UrlUtil.hasMatchingUrl;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
@@ -22,13 +23,15 @@ import org.custom.web.util.result.Result;
 
 public final class HandlerResolver {
 
-  private static final Logger logger = Logger.getLogger("exception logger");
+  private static final Logger LOGGER = Logger.getLogger("exception logger");
+
+  private static final int ONE = 1;
 
   public static Result<Pair<List<Method>, Object>, Throwable> getHandler( // geHandlerPair
       String requestMethod, String url, List<Object> controllers) {
-    Class<? extends Annotation> annotationCls = getCls(requestMethod);
+    final Class<? extends Annotation> annotationCls = getCls(requestMethod);
 
-    var handler =
+    final var handlers =
         controllers.stream()
             .flatMap(
                 controller ->
@@ -37,17 +40,17 @@ public final class HandlerResolver {
                             controller.getClass().getMethods(), controller, annotationCls, url)))
             .toList();
 
-    if (handler.size() > 0) {
-      var result = handler.stream().filter(x -> !x.left().isEmpty()).toList();
-      if (result.size() > 1) {
-        logger.log(Level.SEVERE, "More than one handler found!");
+    if (!handlers.isEmpty()) {
+      final var result = new ArrayList<>(
+          handlers.stream().filter(x -> !x.left().isEmpty()).toList());
+      if (result.size() > ONE) {
+        LOGGER.log(Level.SEVERE, "More than one handler found!");
         System.exit(1);
       } else {
         return Result.of(() -> result.get(FIRST_ELEMENT));
       }
     }
-
-    return Result.of(() -> handler.get(FIRST_ELEMENT));
+    return Result.of(() -> handlers.get(FIRST_ELEMENT));
   }
 
   private static Pair<List<Method>, Object> controllerFilter(
@@ -56,42 +59,35 @@ public final class HandlerResolver {
       Class<? extends Annotation> annotationCls,
       String requestUrl) {
 
-    var sb = new StringBuilder();
+    var classRequestMapping = new StringBuilder();
     if (controller.getClass().isAnnotationPresent(RequestUrl.class)) {
-      sb.append(controller.getClass().getAnnotation(RequestUrl.class).url());
+      classRequestMapping.append(controller.getClass().getAnnotation(RequestUrl.class).url());
     }
     return Pair.of(
         Arrays.stream(methods)
             .filter(
                 method ->
                     method.isAnnotationPresent(annotationCls)
-                        && hasMatchingUrl(method, requestUrl, annotationCls, sb.toString()))
+                        && hasMatchingUrl(method, requestUrl, annotationCls,
+                        classRequestMapping.toString()))
             .collect(Collectors.toList()), controller);
   }
 
   private static Class<? extends Annotation> getCls(String requestMethod) {
+    Class<? extends Annotation> annotationClass = null;
     switch (requestMethod) {
-      case "GET" -> {
-        return Get.class;
-      }
-      case "POST" -> {
-        return Post.class;
-      }
+      case "GET" -> annotationClass = Get.class;
 
-      case "PUT" -> {
-        return Put.class;
-      }
+      case "POST" -> annotationClass = Post.class;
 
-      case "PATCH" -> {
-        return Patch.class;
-      }
+      case "PUT" -> annotationClass = Put.class;
 
-      case "DELETE" -> {
-        return Delete.class;
-      }
-      default -> {
-        return null;
-      }
+      case "PATCH" -> annotationClass = Patch.class;
+
+      case "DELETE" -> annotationClass = Delete.class;
+
+      default -> throw new IllegalStateException("Unexpected value: " + requestMethod);
     }
+    return annotationClass;
   }
 }

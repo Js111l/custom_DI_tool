@@ -10,17 +10,17 @@ import org.custom.core.checker.duplicate.DuplicateChecker;
 import org.custom.core.exceptions.CilcularDependencyFoundExcpetion;
 import org.custom.core.exceptions.DuplicateBeansFound;
 
-public class DependencyInspector {
+public final class DependencyInspector {
 
   public void checkForCycles(Map<Class<?>, List<Class<?>>> classAllDependenciesMap) {
-    var visited = new HashMap<Class<?>, Boolean>();
+    final var visited = new HashMap<Class<?>, Boolean>();
     classAllDependenciesMap.keySet()
         .forEach(aClass -> helper(aClass, visited, classAllDependenciesMap));
   }
 
   public void checkForDuplicates(Map<Class<?>, List<Class<?>>> classAllDependenciesMap,
       List<DuplicateChecker> duplicateCheckers) {
-    var duplicates = ArrayListMultimap.<Class<?>, Class<?>>create();
+    final var duplicates = ArrayListMultimap.<Class<?>, Class<?>>create();
 
     duplicateCheckers.forEach(duplicateChecker -> duplicates.putAll(
         duplicateChecker.findDuplicates(classAllDependenciesMap)));
@@ -36,7 +36,7 @@ public class DependencyInspector {
 
   private void helper(Class<?> aClass, Map<Class<?>, Boolean> visited,
       Map<Class<?>, List<Class<?>>> classListMap) {
-    var list = classListMap.getOrDefault(aClass, new ArrayList<>());
+    final var list = classListMap.getOrDefault(aClass, new ArrayList<>());
 
     if (visited.get(aClass) == null || !visited.get(aClass)) {
       visited.put(aClass, true);

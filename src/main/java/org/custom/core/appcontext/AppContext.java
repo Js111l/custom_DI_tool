@@ -16,7 +16,7 @@ import org.custom.web.WebContext;
 public class AppContext implements CustomApplicationContext {
 
   private final Map<Class<?>, Object> beans;
-  private int port = 8080;
+  private static final int port = 8080;
 
   public AppContext() {
     final var configurer =
@@ -24,32 +24,29 @@ public class AppContext implements CustomApplicationContext {
             new DefaultContextInitializerFactory(new DefaultContextComponentsFactory()));
     this.beans = configurer.getInitializedContext();
 
-    var webContext = new WebContext();
-    System.out.println(beans.get("ControllerWithWired"));
+    final var webContext = new WebContext();
     webContext.configure(this.beans, port);
     webContext.initialize();
   }
 
-  public AppContext(String... packagesToScan) {
+  public AppContext(final String... packagesToScan) {
     final var configurer =
         new ContextConfigurer(
             new DefaultContextInitializerFactory(
                 new DefaultContextComponentsFactory(), packagesToScan));
     this.beans = configurer.getInitializedContext();
 
-    var webContext = new WebContext();
+    final var webContext = new WebContext();
     webContext.configure(this.beans, port);
     webContext.initialize();
   }
+
   @Override
-  public Object getItem(String name) {
-    var key =
-        beans.keySet().stream()
-            .filter(clazz -> clazz.getSimpleName().equals(name))
-            .findFirst()
-            .orElseThrow(
-                () -> new NoSuchBeanFoundException("No such bean with name" + name + "found!"));
-    return beans.get(key);
+  public Object getItem(final String name) {
+    if (!this.beans.containsKey(name)) {
+      throw new NoSuchBeanFoundException("No such bean with name" + name + "found!");
+    }
+    return beans.get(name);
   }
 
   public Map<Class<?>, Object> getContext() {
@@ -57,7 +54,7 @@ public class AppContext implements CustomApplicationContext {
   }
 
   @Override
-  public Object getItem(Class<?> requiredClass) {
+  public Object getItem(final Class<?> requiredClass) {
     // TODO looks ugly in current form
 
     Class<?> classToSearch = requiredClass;
@@ -68,7 +65,8 @@ public class AppContext implements CustomApplicationContext {
           new ArrayList<>(
               this.beans.keySet().stream().filter(classToSearch::isAssignableFrom).toList());
     }
-    var defaults = classList.stream().filter(x -> x.isAnnotationPresent(Default.class)).toList();
+    final var defaults = classList.stream().filter(x -> x.isAnnotationPresent(Default.class))
+        .toList();
 
     if (defaults.size() > ONE) {
       throw new DuplicateBeansFound("more than one default annotation!");

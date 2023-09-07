@@ -3,7 +3,7 @@ package org.custom.core.checker.context;
 import java.util.List;
 import org.custom.core.annotations.Item;
 
-public class ItemChecker implements ContextChecker {
+public final class ItemChecker implements ContextChecker {
 
   @Override
   public boolean isClassInContext(Class<?> classToTest, List<Class<?>> context) {

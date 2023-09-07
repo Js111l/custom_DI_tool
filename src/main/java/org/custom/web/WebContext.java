@@ -17,7 +17,7 @@ public final class WebContext {
   private HttpServer server;
 
   private List<Object> controllers;
-  private final Logger logger = Logger.getLogger("exception logger");
+  private static final Logger LOGGER = Logger.getLogger("exception logger");
 
   public void configure(Map<Class<?>, Object> appContext, int port) {
     this.controllers =
@@ -30,8 +30,9 @@ public final class WebContext {
 
     result.onFailure(
         x -> {
-          logger.log(Level.SEVERE, "An exception occurred: ", x.getMessage());
-          System.exit(1);
+          if (LOGGER.isLoggable(Level.SEVERE)) {
+            LOGGER.log(Level.SEVERE, "An exception occurred"); // TODO: 07.09.2023
+          }
         });
 
     this.server = result.getOrNull();

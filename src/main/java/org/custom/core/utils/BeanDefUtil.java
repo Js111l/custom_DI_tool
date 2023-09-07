@@ -16,10 +16,10 @@ public class BeanDefUtil {
   public static Map<Pair<Object, Class<?>>, List<Method>> getConfigClassMethodsMap(
       List<Class<?>> beanDefClasses,
       Map<Class<?>, Object> containerBeans) {
-    var classListHashMap = new HashMap<Pair<Object, Class<?>>, List<Method>>();
+    final var classListHashMap = new HashMap<Pair<Object, Class<?>>, List<Method>>();
     beanDefClasses.forEach(configClass -> {
-      var configObj = containerBeans.get(configClass);
-      var methods = getAllAnnotatedMethodsFromObject(configObj);
+      final var configObj = containerBeans.get(configClass);
+      final var methods = getAllAnnotatedMethodsFromObject(configObj);
 
       methods.forEach(
           method -> addToMap(classListHashMap, method, configObj, method.getReturnType()));
@@ -36,7 +36,7 @@ public class BeanDefUtil {
 
   private static void addToMap(Map<Pair<Object, Class<?>>, List<Method>> classListHashMap,
       Method method, Object configObj, Class<?> clazz) {
-    var list = classListHashMap.getOrDefault(Pair.of(configObj, clazz), new ArrayList<>());
+    final var list = classListHashMap.getOrDefault(Pair.of(configObj, clazz), new ArrayList<>());
     list.add(method);
     classListHashMap.put(Pair.of(configObj, clazz), list);
   }

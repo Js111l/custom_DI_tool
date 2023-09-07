@@ -20,12 +20,14 @@ public abstract class Result<S, F extends Throwable> {
 
   public static <T, F extends Throwable> Result<T, F> of(
       Supplier<T> computation) {
+    Result<T, F> result;
     try {
-      var result = computation.get();
-      return Result.success(result);
+      var computationResult = computation.get();
+      result = Result.success(computationResult);
     } catch (Exception exception) {
-      return Result.failure((F) exception);
+      result = Result.failure((F) exception);
     }
+    return result;
   }
 
   public abstract boolean isFailure();

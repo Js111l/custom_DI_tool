@@ -20,10 +20,10 @@ public class DefaultContextItemsInitializer implements ContextItemInitializer {
 
   @Override
   public void initializeItems() {
-    var classInitializer = new ClassInitializer(this.items, this.contextCheckers);
+    final var classInitializer = new ClassInitializer(this.items, this.contextCheckers);
 
     this.items.forEach(aClass -> {
-      var initializedObject = classInitializer.initialize(aClass);
+      final var initializedObject = classInitializer.initialize(aClass);
       this.context.put(aClass, initializedObject);
     });
   }

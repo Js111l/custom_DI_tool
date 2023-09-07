@@ -3,7 +3,6 @@ package org.custom.web.server;
 import com.sun.net.httpserver.HttpServer;
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.util.logging.Logger;
 import org.custom.web.util.result.Result;
 
 public final class Server {
