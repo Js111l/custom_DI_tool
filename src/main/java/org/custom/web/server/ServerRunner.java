@@ -7,7 +7,7 @@ import java.util.logging.Logger;
 
 public final class ServerRunner {
 
-  private static final Logger logger = Logger.getLogger("logger"); // TODO: 07.09.2023  
+  private static final Logger logger = Logger.getLogger("logger");
 
   public static void runServer(HttpServer server, HttpHandler handler) {
     server.createContext("/", handler);

@@ -3,6 +3,7 @@ package org.custom.web;
 import com.sun.net.httpserver.HttpServer;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -15,13 +16,14 @@ public final class WebContext {
 
   private HttpServer server;
 
-  private List<Class<?>> controllers;
+  private List<Object> controllers;
   private final Logger logger = Logger.getLogger("exception logger");
 
   public void configure(Map<Class<?>, Object> appContext, int port) {
     this.controllers =
-        appContext.keySet().stream()
-            .filter(x -> x.isAnnotationPresent(RestController.class))
+        appContext.entrySet().stream()
+            .filter(x -> x.getKey().isAnnotationPresent(RestController.class))
+            .map(Entry::getValue)
             .collect(Collectors.toList());
 
     final var result = Server.getServer(port);
@@ -30,7 +32,7 @@ public final class WebContext {
         x -> {
           logger.log(Level.SEVERE, "An exception occurred: ", x.getMessage());
           System.exit(1);
-        }); // TODO
+        });
 
     this.server = result.getOrNull();
   }

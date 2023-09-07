@@ -1,0 +1,51 @@
+{
+	"info": {
+		"_postman_id": "37ff3036-5406-4c43-a84e-bad546449031",
+		"name": "ControllersWithDI",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20564638",
+		"_collection_link": "https://blue-crater-259777.postman.co/workspace/Rest-C%2523~0e9dade9-bc62-4924-b01a-ae956e305de3/collection/20564638-37ff3036-5406-4c43-a84e-bad546449031?action=share&source=collection_link&creator=20564638"
+	},
+	"item": [
+		{
+			"name": "http://localhost:8080/cat/1",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/cat/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"cat",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/dog/1",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/dog/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"dog",
+						"1"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -36,7 +36,7 @@ public class DefultRequestExecuter implements RequestExecuter {
 
   @Override
   public Object executeRequest(
-      Pair<List<Method>, Class<?>> handler, HttpExchange exchange, String httpMethod) {
+      Pair<List<Method>, Object> handler, HttpExchange exchange, String httpMethod) {
     var method = handler.left().get(0);
     var params = new ArrayList<>();
 
@@ -54,11 +54,11 @@ public class DefultRequestExecuter implements RequestExecuter {
             });
     try {
       if (method.getParameters().length == 0) {
-        return method.invoke(new ClassInitializer().initialize(handler.right()),
+        return method.invoke(handler.right(),
             params.toArray());
       }
       if (method.getParameters().length > 0) {
-        return method.invoke(new ClassInitializer().initialize(handler.right()),
+        return method.invoke(handler.right(),
             params.toArray());
       }
 

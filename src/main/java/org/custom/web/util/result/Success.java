@@ -49,7 +49,7 @@ public final class Success<S, F extends Throwable> extends Result<S, F> {
 
   @Override
   public <F extends Throwable> void onFailure(Consumer<F> consumer) {
-    //TODO
+    consumer.accept(null);
   }
 
   @Override

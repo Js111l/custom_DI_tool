@@ -25,6 +25,7 @@ public class AppContext implements CustomApplicationContext {
     this.beans = configurer.getInitializedContext();
 
     var webContext = new WebContext();
+    System.out.println(beans.get("ControllerWithWired"));
     webContext.configure(this.beans, port);
     webContext.initialize();
   }
@@ -40,11 +41,6 @@ public class AppContext implements CustomApplicationContext {
     webContext.configure(this.beans, port);
     webContext.initialize();
   }
-
-  public Map<Class<?>, Object> getBeans() {
-    return beans;
-  }
-
   @Override
   public Object getItem(String name) {
     var key =

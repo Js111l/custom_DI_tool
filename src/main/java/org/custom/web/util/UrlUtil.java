@@ -81,7 +81,7 @@ public class UrlUtil {
       var result = deleteRequestParams(requestUrl);
       return isMatching(result, handlerUrl);
     }
-    return false; // TODO: 07.09.2023  or exception ?
+    return false;
   }
 
   public static boolean isMatchingReqParam(String requestUrl, String handlerUrl) {
@@ -236,7 +236,7 @@ public class UrlUtil {
       case "Get" -> {
         return isMatching(requestUrl, sb + getHandlerUrl("GET", method), method)
             || isMatchingReqParam(requestUrl,
-            sb + getHandlerUrl("GET", method), method); // TODO: 04.09.2023
+            sb + getHandlerUrl("GET", method), method);
       }
       case "Post" -> {
         return isMatching(requestUrl, sb + getHandlerUrl("POST", method))
@@ -262,7 +262,7 @@ public class UrlUtil {
             sb + getHandlerUrl("DELETE", method));
       }
       default -> {
-        return false; // todo
+        return false;
       }
     }
   }

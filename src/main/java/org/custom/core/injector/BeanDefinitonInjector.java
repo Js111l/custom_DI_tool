@@ -10,10 +10,14 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.custom.core.annotations.Default;
 import org.custom.core.exceptions.DuplicateBeansFound;
 
 public class BeanDefinitonInjector extends Injector {
+
+  private final Logger logger = Logger.getLogger("logger");
 
   @Override
   public void setContainerBeans(Map<Class<?>, Object> containerBeans) {
@@ -46,7 +50,8 @@ public class BeanDefinitonInjector extends Injector {
         var returnedBean = method.invoke(objectClassPair.left());
         this.containerBeans.put(returnedBean.getClass(), returnedBean);
       } catch (IllegalAccessException | InvocationTargetException e) {
-        throw new RuntimeException(e); // TODO
+        logger.log(Level.SEVERE, "An exception occurred " + e.getMessage());
+        System.exit(1);
       }
     });
   }

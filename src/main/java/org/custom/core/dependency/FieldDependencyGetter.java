@@ -1,6 +1,5 @@
 package org.custom.core.dependency;
 
-import static org.custom.core.utils.ClassUtil.getFieldAnnotations;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -9,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import org.custom.core.annotations.Wired;
 
 public class FieldDependencyGetter implements DependencyGetter<Class<?>, Field> {
 
@@ -16,12 +16,11 @@ public class FieldDependencyGetter implements DependencyGetter<Class<?>, Field> 
 
   @Override
   public Map<Class<?>, List<Field>> getDependencies(List<Class<?>> classes) {
-    this.fieldAnnotations = getFieldAnnotations(classes);
+
     var fieldHashMap = new HashMap<Class<?>, List<Field>>();
     classes.forEach(cls -> {
       List<Field> fieldDependencies = Arrays.stream(cls.getDeclaredFields())
-          .filter(field -> fieldAnnotations.stream().anyMatch(
-              field::isAnnotationPresent))
+          .filter(field -> field.isAnnotationPresent(Wired.class))
           .collect(Collectors.toList());
 
       fieldHashMap.put(cls, fieldDependencies);

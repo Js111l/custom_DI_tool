@@ -18,11 +18,11 @@ import org.custom.web.util.result.Result;
 
 public class RequestDispatcher implements HttpHandler {
 
-  private final List<Class<?>> controllers;
+  private final List<Object> controllers;
   private final Logger logger = Logger.getLogger("exception logger");
   private final RequestExecuter resolver = new DefultRequestExecuter();
 
-  public RequestDispatcher(List<Class<?>> controllers) {
+  public RequestDispatcher(List<Object> controllers) {
     this.controllers = controllers;
   }
 
@@ -54,7 +54,7 @@ public class RequestDispatcher implements HttpHandler {
   }
 
   private Object executeRequest(
-      String requestMethod, Pair<List<Method>, Class<?>> pair, HttpExchange exchange) {
+      String requestMethod, Pair<List<Method>, Object> pair, HttpExchange exchange) {
     switch (requestMethod) {
       case "GET" -> {
         return resolver.executeRequest(pair, exchange, "GET");
@@ -78,7 +78,7 @@ public class RequestDispatcher implements HttpHandler {
   }
 
   private boolean leftInPairIsEmpty(
-      Result<Pair<List<Method>, Class<?>>, Throwable> pairThrowableResult) {
+      Result<Pair<List<Method>,Object>, Throwable> pairThrowableResult) {
     return pairThrowableResult.getOrNull().left().isEmpty();
   }
 

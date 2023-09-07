@@ -18,7 +18,7 @@ public final class DefaultRequestParamGetter extends ValueGetter {
   @Override
   public List<Object> getValuesFromRequest(HttpExchange exchange, Method handler) {
     var urlFromRequest = exchange.getRequestURI().toString();
-    var urlFromHandler = getHandlerUrl(exchange.getRequestMethod(), handler); // TODO: 06.09.2023
+    var urlFromHandler = getHandlerUrl(exchange.getRequestMethod(), handler);
 
     var map = UrlUtil.getRequestParamValueMapFromUrl(urlFromRequest, urlFromHandler);
 
@@ -32,11 +32,9 @@ public final class DefaultRequestParamGetter extends ValueGetter {
                 if (parameter.isAnnotationPresent(RequestParam.class)) {
                   var value = map.get(parameter.getName());
                   counter.getAndIncrement();
-                //  System.out.println(handler); // TODO: 07.09.2023 Why it fails where there is no print and works if there is ?
-                  //System.out.println(parameter.getName());
                   if (value == null) {
                     throw new RuntimeException(
-                        "Too many req params in request."); // TODO: 06.09.2023
+                        "Too many req params in request.");
                   }
                   params.add(ValueCaster.cast(value, parameter.getType()));
                 }

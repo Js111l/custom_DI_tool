@@ -3,10 +3,14 @@ package org.custom.core.injector;
 
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.custom.core.dependency.FieldDependencyGetter;
 import org.custom.core.initializer.ClassInitializer;
 
 public class FieldInjector extends Injector {
+
+  private final Logger logger = Logger.getLogger("exception logger");
 
   @Override
   public void setContainerBeans(Map<Class<?>, Object> containerBeans) {
@@ -39,7 +43,8 @@ public class FieldInjector extends Injector {
           try {
             field.set(obj, initializedObject);
           } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);  //TODO
+            logger.log(Level.SEVERE, "An exception occurred " + e.getMessage());
+            System.exit(1);
           }
           containerBeans.put(obj.getClass(), obj);
         });

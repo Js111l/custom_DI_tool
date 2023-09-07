@@ -6,16 +6,20 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ClassInspector {
 
   private String[] packagesToScan;
+  private final Logger logger = Logger.getLogger("logger");
 
   public ClassInspector(String... packagesToScan) {
     this.packagesToScan = packagesToScan;
   }
 
-  public ClassInspector() {}
+  public ClassInspector() {
+  }
 
   public List<Class<?>> getAllClasses() {
     List<Class<?>> list;
@@ -42,8 +46,10 @@ public class ClassInspector {
     try {
       return Class.forName(className);
     } catch (ClassNotFoundException e) {
-      throw new RuntimeException(e); // TODO
+      logger.log(Level.SEVERE, "An exception occurred " + e.getMessage());
+      System.exit(1);
     }
+    return null;
   }
 
   private List<String> getClassNameList() {
@@ -72,7 +78,7 @@ public class ClassInspector {
       File file, List<String> classes, StringBuilder packageName) {
 
     if (file.isDirectory()) {
-      int lastIndx = packageName.length();
+      int lastIndex = packageName.length();
       appendDirName(packageName, file);
       var directoryFiles = file.listFiles();
       assert directoryFiles != null;
@@ -82,7 +88,7 @@ public class ClassInspector {
               fileFromDirectory ->
                   collectClassNamesRecursively(fileFromDirectory, classes, packageName));
 
-      packageName.delete(lastIndx, packageName.length());
+      packageName.delete(lastIndex, packageName.length());
     } else {
       var className = deleteClassSuffix(file.getName());
       classes.add(packageName + "." + className);

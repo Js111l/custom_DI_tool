@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import org.custom.core.annotations.ConfigBeanDefinitions;
 import org.custom.core.annotations.Item;
 
 public class ItemConfigDuplicateChecker implements DuplicateChecker {
@@ -15,14 +16,16 @@ public class ItemConfigDuplicateChecker implements DuplicateChecker {
       Map<Class<?>, List<Class<?>>> classAllDependenciesMap) {
     var duplicates = ArrayListMultimap.<Class<?>, Class<?>>create();
 
-    classAllDependenciesMap.values().stream().flatMap(Collection::stream).forEach(value -> {
-      if (classAllDependenciesMap.containsKey(value)) {
-        var key = getKeyFromValue(value, classAllDependenciesMap);
-        if (!key.isAnnotationPresent(Item.class)) {
-          duplicates.put(value, value);
-        }
-      }
-    });
+    classAllDependenciesMap.entrySet().stream().filter(entry -> entry.getKey().isAnnotationPresent(
+            ConfigBeanDefinitions.class)).map(entry -> entry.getValue()).flatMap(Collection::stream)
+        .forEach(value -> {
+          if (classAllDependenciesMap.containsKey(value)) {
+            var key = getKeyFromValue(value, classAllDependenciesMap);
+            if (!key.isAnnotationPresent(Item.class)) {
+              duplicates.put(value, value);
+            }
+          }
+        });
     return duplicates;
   }
 

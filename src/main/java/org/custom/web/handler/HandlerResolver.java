@@ -5,7 +5,6 @@ import static org.custom.web.util.UrlUtil.hasMatchingUrl;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
@@ -25,24 +24,24 @@ public final class HandlerResolver {
 
   private static final Logger logger = Logger.getLogger("exception logger");
 
-  public static Result<Pair<List<Method>, Class<?>>, Throwable> getHandler( // geHandlerPair
-      String requestMethod, String url, List<Class<?>> controllers) {
+  public static Result<Pair<List<Method>, Object>, Throwable> getHandler( // geHandlerPair
+      String requestMethod, String url, List<Object> controllers) {
     Class<? extends Annotation> annotationCls = getCls(requestMethod);
 
     var handler =
         controllers.stream()
             .flatMap(
-                controllerCls ->
+                controller ->
                     Stream.of(
                         controllerFilter(
-                            controllerCls.getMethods(), controllerCls, annotationCls, url)))
+                            controller.getClass().getMethods(), controller, annotationCls, url)))
             .toList();
 
     if (handler.size() > 0) {
       var result = handler.stream().filter(x -> !x.left().isEmpty()).toList();
       if (result.size() > 1) {
         logger.log(Level.SEVERE, "More than one handler found!");
-        System.exit(1);// TODO: 07.09.2023
+        System.exit(1);
       } else {
         return Result.of(() -> result.get(FIRST_ELEMENT));
       }
@@ -51,15 +50,15 @@ public final class HandlerResolver {
     return Result.of(() -> handler.get(FIRST_ELEMENT));
   }
 
-  private static Pair<List<Method>, Class<?>> controllerFilter(
+  private static Pair<List<Method>, Object> controllerFilter(
       Method[] methods,
-      Class<?> controllerCls,
+      Object controller,
       Class<? extends Annotation> annotationCls,
       String requestUrl) {
 
     var sb = new StringBuilder();
-    if (controllerCls.isAnnotationPresent(RequestUrl.class)) {
-      sb.append(controllerCls.getAnnotation(RequestUrl.class).url());
+    if (controller.getClass().isAnnotationPresent(RequestUrl.class)) {
+      sb.append(controller.getClass().getAnnotation(RequestUrl.class).url());
     }
     return Pair.of(
         Arrays.stream(methods)
@@ -67,8 +66,7 @@ public final class HandlerResolver {
                 method ->
                     method.isAnnotationPresent(annotationCls)
                         && hasMatchingUrl(method, requestUrl, annotationCls, sb.toString()))
-            .collect(Collectors.toList()),
-        controllerCls);
+            .collect(Collectors.toList()), controller);
   }
 
   private static Class<? extends Annotation> getCls(String requestMethod) {
@@ -92,7 +90,7 @@ public final class HandlerResolver {
         return Delete.class;
       }
       default -> {
-        return null; // todo
+        return null;
       }
     }
   }

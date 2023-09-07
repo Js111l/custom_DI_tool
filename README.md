@@ -188,3 +188,36 @@ public class ProductController {
 }
 
 ```
+
+```
+@RestController
+public class CatController {
+
+  @Wired
+  CatService catService;
+
+  @Get(url = "/cats/{id}")
+  public Cat getCat(@PathVariable long id) {
+    return catService.findCatById(id);
+  }
+}
+
+```
+
+```
+@RestController
+public class CatController {
+
+  private CatService catService;
+  
+  public CatController(CatService service){
+  this.catService=service;
+  }
+
+  @Get(url = "/cats/{id}")
+  public Cat getCat(@PathVariable long id) {
+    return this.catService.findCatById(id);
+  }
+}
+
+```
