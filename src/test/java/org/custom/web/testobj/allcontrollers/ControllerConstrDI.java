@@ -1,6 +1,5 @@
-package org.custom.appcontext.testobj.web.controllerditest;
+package org.custom.web.testobj.allcontrollers;
 
-import org.custom.appcontext.testobj.web.allcontrollers.Dog;
 import org.custom.web.annotations.Get;
 import org.custom.web.annotations.PathVariable;
 import org.custom.web.annotations.RestController;
@@ -18,6 +17,6 @@ public class ControllerConstrDI {
   @Get(url = "/dog/{id}")
   public RestResponse<String> getBark(@PathVariable long id) {
     dog.bark();
-    return new RestResponse<>("cat meows!", HttpStatusCode.OK);
+    return new RestResponse<>("Dog barks!", HttpStatusCode.OK);
   }
 }

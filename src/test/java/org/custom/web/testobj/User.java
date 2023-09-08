@@ -1,3 +1,3 @@
-package org.custom.appcontext.testobj.web;
+package org.custom.web.testobj;
 
 public record User(String name, String address) {}

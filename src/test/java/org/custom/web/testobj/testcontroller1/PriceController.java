@@ -1,7 +1,7 @@
-package org.custom.appcontext.testobj.web.allcontrollers;
+package org.custom.web.testobj.testcontroller1;
 
 import java.math.BigDecimal;
-import org.custom.appcontext.testobj.web.Price;
+import org.custom.web.testobj.Price;
 import org.custom.web.annotations.Delete;
 import org.custom.web.annotations.Get;
 import org.custom.web.annotations.PathVariable;

@@ -1,6 +1,5 @@
-package org.custom.appcontext.testobj.web.controllerditest;
+package org.custom.web.testobj.allcontrollers;
 
-import org.custom.appcontext.testobj.web.allcontrollers.Cat;
 import org.custom.core.annotations.Wired;
 import org.custom.web.annotations.Get;
 import org.custom.web.annotations.PathVariable;

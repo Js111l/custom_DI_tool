@@ -27,7 +27,7 @@ public final class HandlerResolver {
 
   private static final int ONE = 1;
 
-  public static Result<Pair<List<Method>, Object>, Throwable> getHandler( // geHandlerPair
+  public static Result<Pair<List<Method>, Object>, Throwable> getHandlerPair(
       String requestMethod, String url, List<Object> controllers) {
     final Class<? extends Annotation> annotationCls = getCls(requestMethod);
 

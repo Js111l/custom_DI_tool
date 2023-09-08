@@ -13,7 +13,7 @@ import org.custom.core.exceptions.DuplicateBeansFound;
 import org.custom.core.exceptions.NoSuchBeanFoundException;
 import org.custom.web.WebContext;
 
-public class AppContext implements CustomApplicationContext {
+public final class AppContext implements CustomApplicationContext {
 
   private final Map<Class<?>, Object> beans;
   private static final int port = 8080;
@@ -23,10 +23,6 @@ public class AppContext implements CustomApplicationContext {
         new ContextConfigurer(
             new DefaultContextInitializerFactory(new DefaultContextComponentsFactory()));
     this.beans = configurer.getInitializedContext();
-
-    final var webContext = new WebContext();
-    webContext.configure(this.beans, port);
-    webContext.initialize();
   }
 
   public AppContext(final String... packagesToScan) {
@@ -35,10 +31,6 @@ public class AppContext implements CustomApplicationContext {
             new DefaultContextInitializerFactory(
                 new DefaultContextComponentsFactory(), packagesToScan));
     this.beans = configurer.getInitializedContext();
-
-    final var webContext = new WebContext();
-    webContext.configure(this.beans, port);
-    webContext.initialize();
   }
 
   @Override

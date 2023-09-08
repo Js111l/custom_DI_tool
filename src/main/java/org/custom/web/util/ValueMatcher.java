@@ -1,6 +1,7 @@
 package org.custom.web.util;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.util.Map;
 import org.custom.web.util.result.Result;
 
@@ -11,9 +12,9 @@ public final class ValueMatcher {
     final var params = method.getParameters();
 
     if (containsPathVariables(map)) {
-      for (int i = 0; i < params.length; i++) {
-        if (map.containsKey(params[i].getName())) {
-          if (isCastIsNotPossible(map.get(params[i].getName()), params[i].getType())) {
+      for (Parameter param : params) {
+        if (map.containsKey(param.getName())) {
+          if (isCastIsNotPossible(map.get(param.getName()), param.getType())) {
             return false;
           }
         } else {

@@ -1,9 +1,9 @@
-package org.custom.appcontext.testobj.web.testcontroller3;
+package org.custom.web.testobj.testcontroller3;
 
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import org.custom.appcontext.testobj.web.Product;
+import org.custom.web.testobj.Product;
 import org.custom.web.annotations.Delete;
 import org.custom.web.annotations.Get;
 import org.custom.web.annotations.Post;

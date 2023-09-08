@@ -1,4 +1,4 @@
-package org.custom.appcontext.testobj.web;
+package org.custom.web.testobj;
 
 public class Something {
   private String name;

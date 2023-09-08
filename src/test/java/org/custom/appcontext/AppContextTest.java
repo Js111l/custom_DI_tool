@@ -18,10 +18,8 @@ import org.custom.core.appcontext.AppContext;
 import org.custom.core.appcontext.CustomApplicationContext;
 import org.custom.core.exceptions.DuplicateBeansFound;
 import org.custom.core.exceptions.NoSuchBeanFoundException;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-@Disabled
 class AppContextTest {
 
   private static final String SIMPLE_DI_TESTOBJECTS_PACKAGE =

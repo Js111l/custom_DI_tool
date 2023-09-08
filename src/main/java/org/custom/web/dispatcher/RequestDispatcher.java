@@ -1,6 +1,6 @@
 package org.custom.web.dispatcher;
 
-import static org.custom.web.handler.HandlerResolver.getHandler;
+import static org.custom.web.handler.HandlerResolver.getHandlerPair;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.net.httpserver.HttpExchange;
@@ -32,7 +32,7 @@ public class RequestDispatcher implements HttpHandler {
     final var url = exchange.getRequestURI().toString();
 
     // gets appropriate handler from Controllers
-    final var pairThrowableResult = getHandler(requestMethod, url, this.controllers);
+    final var pairThrowableResult = getHandlerPair(requestMethod, url, this.controllers);
 
     // set 404 response if error
     if (pairThrowableResult.isFailure() || leftInPairIsEmpty(pairThrowableResult)) {

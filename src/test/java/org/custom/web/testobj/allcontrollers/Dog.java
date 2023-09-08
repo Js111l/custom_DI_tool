@@ -1,4 +1,4 @@
-package org.custom.appcontext.testobj.web.allcontrollers;
+package org.custom.web.testobj.allcontrollers;
 
 import lombok.Data;
 import org.custom.core.annotations.Item;

@@ -1,7 +1,7 @@
-package org.custom.appcontext.testobj.web.testcontroller2;
+package org.custom.web.testobj.testcontroller2;
 
 import java.util.Map;
-import org.custom.appcontext.testobj.web.User;
+import org.custom.web.testobj.User;
 import org.custom.web.annotations.Delete;
 import org.custom.web.annotations.Get;
 import org.custom.web.annotations.Patch;

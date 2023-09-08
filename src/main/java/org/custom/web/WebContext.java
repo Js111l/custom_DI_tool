@@ -29,9 +29,10 @@ public final class WebContext {
     final var result = Server.getServer(port);
 
     result.onFailure(
-        x -> {
+        throwable -> {
           if (LOGGER.isLoggable(Level.SEVERE)) {
-            LOGGER.log(Level.SEVERE, "An exception occurred"); // TODO: 07.09.2023
+            LOGGER.log(Level.SEVERE, "An exception occurred: " + throwable.getMessage());
+            System.exit(1);
           }
         });
 
